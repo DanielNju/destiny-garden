@@ -1,23 +1,17 @@
 // ======================================================
-// DESTINY GARDENS - FOCUSED SCENE-CARD GUIDED TOUR
+// DESTINY GARDENS - MOBILE OPTIMIZED VERSION
 // UPDATED VERSION
-// - Resume works
-// - Pause works
-// - User interaction pauses temporarily then resumes
-// - Active section changes the whole site theme
-// - Map shows pinned location by default
-// - Route only loads after user asks for directions
+// - Guided auto-scroll removed
+// - Main sliders autoplay only in active/visible section
+// - Mini slides still rotate normally
+// - Heavy videos lazy-load
+// - Service worker registration added
+// - Map still works
 // ======================================================
 
 // ========== DOM ==========
 const sections = [...document.querySelectorAll('.scene')];
-const main = document.getElementById('main');
 const progressDotsWrap = document.getElementById('progressDots');
-const tourStatus = document.getElementById('tourStatus');
-const tourLabel = document.getElementById('tourLabel');
-const toggleTourBtn = document.getElementById('toggleTourBtn');
-const restartTourBtn = document.getElementById('restartTourBtn');
-const exploreFreeBtn = document.getElementById('exploreFreeBtn');
 
 const modal = document.getElementById('previewModal');
 const modalMedia = document.getElementById('modalMedia');
@@ -39,15 +33,6 @@ const routeInfoDiv = document.getElementById('route-info');
 // ========== GLOBAL STATE ==========
 const state = {
   currentSection: 0,
-  guidedEnabled: true,
-  pausedByUser: false,
-  inactiveDelay: 4200,
-  baseSceneDelay: 11000,
-  heroDelay: 12000,
-  sectionScrollDuration: 2400,
-  sceneTimer: null,
-  resumeTimer: null,
-  sectionScrollRAF: null,
   sliders: []
 };
 
@@ -98,6 +83,32 @@ function easeInOutCubic(t) {
     : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
+// ========== SCROLL ==========
+function animatedScrollTo(targetY, duration = 1200) {
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeInOutCubic(progress);
+
+    window.scrollTo(0, startY + distance * eased);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function smoothScrollToElement(element, duration = 1200) {
+  if (!element) return;
+  animatedScrollTo(element.offsetTop, duration);
+}
+
 // ========== PROGRESS ==========
 function buildProgressDots() {
   if (!progressDotsWrap) return;
@@ -115,56 +126,6 @@ function updateProgressDots() {
   [...progressDotsWrap.children].forEach((dot, i) => {
     dot.classList.toggle('active', i === state.currentSection);
   });
-}
-
-// ========== TOUR STATUS ==========
-function setTourStatus(active, message) {
-  if (!tourStatus || !tourLabel || !toggleTourBtn) return;
-  tourStatus.classList.toggle('paused', !active);
-  tourLabel.textContent = message;
-  toggleTourBtn.textContent = active ? '⏸ Pause Tour' : '▶ Resume Tour';
-}
-
-// ========== SCROLL ==========
-function stopAnimatedScroll() {
-  if (state.sectionScrollRAF) {
-    cancelAnimationFrame(state.sectionScrollRAF);
-    state.sectionScrollRAF = null;
-  }
-}
-
-function animatedScrollTo(targetY, duration = state.sectionScrollDuration) {
-  stopAnimatedScroll();
-
-  const startY = window.scrollY;
-  const distance = targetY - startY;
-  const startTime = performance.now();
-
-  function step(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = easeInOutCubic(progress);
-
-    window.scrollTo(0, startY + distance * eased);
-
-    if (progress < 1) {
-      state.sectionScrollRAF = requestAnimationFrame(step);
-    } else {
-      state.sectionScrollRAF = null;
-    }
-  }
-
-  state.sectionScrollRAF = requestAnimationFrame(step);
-}
-
-function scrollToSection(index) {
-  if (!sections[index]) return;
-  animatedScrollTo(sections[index].offsetTop, state.sectionScrollDuration);
-}
-
-function smoothScrollToElement(element, duration = state.sectionScrollDuration) {
-  if (!element) return;
-  animatedScrollTo(element.offsetTop, duration);
 }
 
 // ========== SECTION VISIBILITY ==========
@@ -192,137 +153,40 @@ function getCurrentVisibleSection() {
   return sections[state.currentSection] || null;
 }
 
-function getSliderForSection(sectionEl) {
-  if (!sectionEl) return null;
-  return state.sliders.find(slider => slider.section === sectionEl) || null;
-}
-
 function syncVisibleSection() {
   const bestIndex = getMostVisibleSectionIndex();
 
   if (bestIndex !== state.currentSection) {
     state.currentSection = bestIndex;
     updateProgressDots();
-    applyThemeBySection(sections[bestIndex].id);
+    applyThemeBySection(sections[bestIndex]?.id);
 
-    state.sliders.forEach(slider => {
-      const active = slider.section === sections[bestIndex];
-      slider.setSectionActive(active);
+    state.sliders.forEach((slider) => {
+      slider.setSectionActive(slider.section === sections[bestIndex]);
     });
 
     if (sections[bestIndex]?.id === 'map') {
       initMap();
       invalidateMapSoon();
     }
-
-    scheduleNextScene();
   }
-}
-
-// ========== GUIDE ==========
-function scheduleNextScene() {
-  clearTimeout(state.sceneTimer);
-
-  if (!state.guidedEnabled || state.pausedByUser) return;
-
-  const sectionEl = getCurrentVisibleSection();
-  const slider = getSliderForSection(sectionEl);
-
-  let delay = state.baseSceneDelay;
-
-  if (sectionEl && sectionEl.id === 'hero') {
-    delay = state.heroDelay;
-  }
-
-  if (slider) {
-    delay = slider.getRecommendedSectionDelay();
-    slider.ensureAutoplay();
-  }
-
-  state.sceneTimer = setTimeout(() => {
-    if (!state.guidedEnabled || state.pausedByUser) return;
-    const next = (state.currentSection + 1) % sections.length;
-    scrollToSection(next);
-  }, delay);
-}
-
-function pauseGuideTemporarily() {
-  if (!state.guidedEnabled) return;
-  if (state.pausedByUser) return;
-
-  clearTimeout(state.sceneTimer);
-  clearTimeout(state.resumeTimer);
-  stopAnimatedScroll();
-
-  setTourStatus(false, 'Tour paused — interaction detected');
-
-  state.sliders.forEach(slider => slider.pauseAutoplay());
-
-  state.resumeTimer = setTimeout(() => {
-    if (!state.guidedEnabled || state.pausedByUser) return;
-
-    setTourStatus(true, 'Guided tour resumed');
-
-    const currentIndex = getMostVisibleSectionIndex();
-    state.currentSection = currentIndex;
-    updateProgressDots();
-    applyThemeBySection(sections[currentIndex]?.id);
-
-    const currentSection = getCurrentVisibleSection();
-    const currentSlider = getSliderForSection(currentSection);
-
-    state.sliders.forEach(slider => {
-      slider.setSectionActive(slider.section === currentSection);
-    });
-
-    if (currentSlider) {
-      currentSlider.ensureAutoplay();
-    }
-
-    scheduleNextScene();
-  }, state.inactiveDelay);
-}
-
-function onUserInteraction(event) {
-  if (!state.guidedEnabled) return;
-  if (state.pausedByUser) return;
-
-  const target = event?.target;
-
-  if (
-    target &&
-    target.closest(
-      '#toggleTourBtn, #restartTourBtn, #exploreFreeBtn, .modal-close, #modalCloseBtn2'
-    )
-  ) {
-    return;
-  }
-
-  pauseGuideTemporarily();
 }
 
 // ========== MAP HELPERS ==========
 function setMapStatus(message) {
-  if (mapStatus) {
-    mapStatus.textContent = message;
-  }
+  if (mapStatus) mapStatus.textContent = message;
 }
 
 function setUserLocationText(message) {
-  if (userLocationDiv) {
-    userLocationDiv.innerHTML = message;
-  }
+  if (userLocationDiv) userLocationDiv.innerHTML = message;
 }
 
 function setRouteInfoText(message) {
-  if (routeInfoDiv) {
-    routeInfoDiv.innerHTML = message;
-  }
+  if (routeInfoDiv) routeInfoDiv.innerHTML = message;
 }
 
 function invalidateMapSoon() {
   if (!map) return;
-
   setTimeout(() => map.invalidateSize(), 250);
   setTimeout(() => map.invalidateSize(), 700);
 }
@@ -370,20 +234,21 @@ function resetToPinnedLocation() {
   map.setView([DESTINY_LAT, DESTINY_LNG], 15);
 
   setMapStatus('Showing Destiny Gardens location.');
-  
   setRouteInfoText('Tap “Use My Location” or “Get Directions” to load your route.');
 }
 
 function updateUserMarker(latitude, longitude, accuracy) {
   if (!map) return;
 
+  const popupText = `You are here<br>±${Math.round(accuracy)}m`;
+
   if (userMarker) {
     userMarker.setLatLng([latitude, longitude]);
-    userMarker.setPopupContent(`You are here<br>±${Math.round(accuracy)}m`);
+    userMarker.setPopupContent(popupText);
   } else {
     userMarker = L.marker([latitude, longitude])
       .addTo(map)
-      .bindPopup(`You are here<br>±${Math.round(accuracy)}m`);
+      .bindPopup(popupText);
   }
 }
 
@@ -412,12 +277,12 @@ function fetchRoute(userLat, userLng) {
   const timeoutId = setTimeout(() => controller.abort(), 8000);
 
   fetch(osrmUrl, { signal: controller.signal })
-    .then(response => {
+    .then((response) => {
       clearTimeout(timeoutId);
       if (!response.ok) throw new Error('Routing service network error');
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       if (data.code !== 'Ok' || !data.routes || !data.routes.length) {
         throw new Error('No route found');
       }
@@ -438,11 +303,9 @@ function fetchRoute(userLat, userLng) {
       map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
 
       setMapStatus('Route loaded successfully.');
-      setRouteInfoText(`
-          <strong>${distanceKm} km • ${durationMin} min</strong>
-        `);
+      setRouteInfoText(`<strong>${distanceKm} km • ${durationMin} min</strong>`);
     })
-    .catch(error => {
+    .catch((error) => {
       clearTimeout(timeoutId);
       console.error('Route error:', error);
 
@@ -492,7 +355,7 @@ function getLocationAndRoute() {
       }
 
       setMapStatus('Your location found.');
-      setUserLocationText(`Location detected.`);
+      setUserLocationText('Location detected.');
 
       updateUserMarker(latitude, longitude, accuracy);
       fetchRoute(latitude, longitude);
@@ -527,11 +390,9 @@ function openDirectionsExperience(event) {
     event.stopPropagation();
   }
 
-  onUserInteraction(event);
-
   const mapSection = document.getElementById('map');
   if (mapSection) {
-    smoothScrollToElement(mapSection, 1800);
+    smoothScrollToElement(mapSection, 1200);
   }
 
   initMap();
@@ -539,7 +400,7 @@ function openDirectionsExperience(event) {
   setTimeout(() => {
     invalidateMapSoon();
     getLocationAndRoute();
-  }, 900);
+  }, 700);
 }
 
 // ========== MEDIA HELPERS ==========
@@ -557,21 +418,55 @@ function loadVideoSource(video) {
 }
 
 function playVideo(video) {
+  if (!video) return;
+
   try {
     loadVideoSource(video);
-    video.play().catch(() => {});
+    const promise = video.play();
+    if (promise && typeof promise.catch === 'function') {
+      promise.catch(() => {});
+    }
   } catch (error) {
     /* ignore */
   }
 }
 
 function pauseVideo(video) {
+  if (!video) return;
+
   try {
     video.pause();
   } catch (error) {
     /* ignore */
   }
 }
+
+function initMediaObserver() {
+  const mediaItems = document.querySelectorAll('video.mini-scene, video.hero-video, video');
+
+  if (!mediaItems.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+
+        if (entry.isIntersecting) {
+          loadVideoSource(video);
+        } else {
+          pauseVideo(video);
+        }
+      });
+    },
+    {
+      rootMargin: '200px 0px',
+      threshold: 0.15
+    }
+  );
+
+  mediaItems.forEach((video) => observer.observe(video));
+}
+
 // ========== EXPERIENCE SLIDER ==========
 function createExperienceSlider(shell) {
   const section = shell.closest('.scene');
@@ -607,11 +502,11 @@ function createExperienceSlider(shell) {
   function stopMiniRotators() {
     clearPendingSceneTimeout();
 
-    slides.forEach(slide => {
+    slides.forEach((slide) => {
       slide.classList.remove('scene-card-active');
 
       const sceneItems = slide.querySelectorAll('.mini-scene');
-      sceneItems.forEach(item => {
+      sceneItems.forEach((item) => {
         item.classList.remove('showing');
         if (item.tagName === 'VIDEO') pauseVideo(item);
       });
@@ -629,9 +524,9 @@ function createExperienceSlider(shell) {
     const descriptionEl = slide.querySelector('.scene-description');
     const priceEl = slide.querySelector('.scene-price');
 
-    if (titleEl) titleEl.textContent = item.dataset.title || '';
-    if (descriptionEl) descriptionEl.textContent = item.dataset.description || '';
-    if (priceEl) priceEl.textContent = item.dataset.price || '';
+    if (titleEl) titleEl.textContent = item?.dataset.title || '';
+    if (descriptionEl) descriptionEl.textContent = item?.dataset.description || '';
+    if (priceEl) priceEl.textContent = item?.dataset.price || '';
   }
 
   function showSceneItem(slide, items, index) {
@@ -640,8 +535,11 @@ function createExperienceSlider(shell) {
       item.classList.toggle('showing', active);
 
       if (item.tagName === 'VIDEO') {
-        if (active) playVideo(item);
-        else pauseVideo(item);
+        if (active && sectionIsActive) {
+          playVideo(item);
+        } else {
+          pauseVideo(item);
+        }
       }
     });
 
@@ -685,7 +583,10 @@ function createExperienceSlider(shell) {
     if (currentSpan) currentSpan.textContent = currentIndex + 1;
 
     stopMiniRotators();
-    startMiniSceneCycle(slides[currentIndex]);
+
+    if (sectionIsActive) {
+      startMiniSceneCycle(slides[currentIndex]);
+    }
   }
 
   function getCurrentSlideSceneCount() {
@@ -695,33 +596,31 @@ function createExperienceSlider(shell) {
   }
 
   function getDelayForCurrentSlide() {
-    return (getCurrentSlideSceneCount() * MINI_SCENE_DELAY) + MINI_SCENE_END_HOLD;
-  }
-
-  function next(manual = false) {
-    currentIndex = (currentIndex + 1) % slides.length;
-    render();
-
-    if (manual) onUserInteraction();
-  }
-
-  function prev(manual = false) {
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    render();
-
-    if (manual) onUserInteraction();
+    return getCurrentSlideSceneCount() * MINI_SCENE_DELAY + MINI_SCENE_END_HOLD;
   }
 
   function scheduleCurrentSlideAdvance() {
     clearTimeout(autoTimer);
 
-    if (!sectionIsActive || state.pausedByUser || !state.guidedEnabled) return;
+    if (!sectionIsActive) return;
 
     autoTimer = setTimeout(() => {
-      if (!sectionIsActive || state.pausedByUser || !state.guidedEnabled) return;
-      next(false);
+      currentIndex = (currentIndex + 1) % slides.length;
+      render();
       scheduleCurrentSlideAdvance();
     }, getDelayForCurrentSlide());
+  }
+
+  function next() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    render();
+    scheduleCurrentSlideAdvance();
+  }
+
+  function prev() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    render();
+    scheduleCurrentSlideAdvance();
   }
 
   function pauseAutoplay() {
@@ -735,54 +634,36 @@ function createExperienceSlider(shell) {
     scheduleCurrentSlideAdvance();
   }
 
-  function ensureAutoplay() {
-    if (sectionIsActive && !autoTimer) {
-      resumeAutoplay();
-    }
-  }
-
   function setSectionActive(active) {
     sectionIsActive = active;
 
     if (!active) {
       pauseAutoplay();
     } else {
-      ensureAutoplay();
+      resumeAutoplay();
     }
-  }
-
-  function getRecommendedSectionDelay() {
-    const totalMiniScenes = slides.reduce((sum, slide) => {
-      return sum + Math.max(slide.querySelectorAll('.mini-scene').length, 1);
-    }, 0);
-
-    return Math.max(
-      state.baseSceneDelay,
-      (totalMiniScenes * MINI_SCENE_DELAY) + (slides.length * MINI_SCENE_END_HOLD) + 1800
-    );
   }
 
   if (prevBtn) {
     prevBtn.addEventListener('click', (event) => {
       event.stopPropagation();
-      prev(true);
+      prev();
     });
   }
 
   if (nextBtn) {
     nextBtn.addEventListener('click', (event) => {
       event.stopPropagation();
-      next(true);
+      next();
     });
   }
 
-  slides.forEach(slide => {
+  slides.forEach((slide) => {
     const btn = slide.querySelector('.open-modal-btn');
     if (btn) {
       btn.addEventListener('click', (event) => {
         event.stopPropagation();
         openModalFromSlide(slide, type);
-        onUserInteraction(event);
       });
     }
   });
@@ -793,9 +674,7 @@ function createExperienceSlider(shell) {
     section,
     pauseAutoplay,
     resumeAutoplay,
-    ensureAutoplay,
-    setSectionActive,
-    getRecommendedSectionDelay
+    setSectionActive
   };
 }
 
@@ -807,7 +686,7 @@ function initCountdowns() {
   function updateCountdowns() {
     const now = Date.now();
 
-    countdownEls.forEach(el => {
+    countdownEls.forEach((el) => {
       const target = new Date(el.dataset.countdown).getTime();
       if (Number.isNaN(target)) return;
 
@@ -864,6 +743,8 @@ function openModalFromSlide(slide, type = 'activities') {
     modalPrice.textContent = scene?.dataset.price || 'Contact us';
 
     if (scene.tagName === 'VIDEO') {
+      loadVideoSource(scene);
+
       const video = document.createElement('video');
       const source = scene.querySelector('source');
 
@@ -897,6 +778,8 @@ function openModalFromSlide(slide, type = 'activities') {
     thumb.setAttribute('aria-label', scene.dataset.title || `Preview ${index + 1}`);
 
     if (scene.tagName === 'VIDEO') {
+      loadVideoSource(scene);
+
       const video = document.createElement('video');
       const source = scene.querySelector('source');
 
@@ -943,6 +826,7 @@ function openMemoryModal(card) {
     video.autoplay = true;
     video.muted = true;
     video.loop = true;
+    video.playsInline = true;
     modalMedia.appendChild(video);
   } else {
     const img = document.createElement('img');
@@ -981,11 +865,10 @@ if (modal) {
 }
 
 // ========== MEMORIES ==========
-document.querySelectorAll('.open-memory').forEach(card => {
+document.querySelectorAll('.open-memory').forEach((card) => {
   card.addEventListener('click', (event) => {
     event.stopPropagation();
     openMemoryModal(card);
-    onUserInteraction(event);
   });
 });
 
@@ -994,99 +877,24 @@ function initFadeUps() {
   const fadeEls = document.querySelectorAll('.fade-up');
   if (!fadeEls.length) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, {
-    threshold: 0.16,
-    rootMargin: '0px 0px -8% 0px'
-  });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    },
+    {
+      threshold: 0.16,
+      rootMargin: '0px 0px -8% 0px'
+    }
+  );
 
-  fadeEls.forEach(el => observer.observe(el));
+  fadeEls.forEach((el) => observer.observe(el));
 }
 
 // ========== CONTROLS ==========
-if (toggleTourBtn) {
-  toggleTourBtn.addEventListener('click', (event) => {
-    event.stopPropagation();
-
-    state.pausedByUser = !state.pausedByUser;
-
-    if (state.pausedByUser) {
-      clearTimeout(state.sceneTimer);
-      clearTimeout(state.resumeTimer);
-      stopAnimatedScroll();
-      state.sliders.forEach(slider => slider.pauseAutoplay());
-      setTourStatus(false, 'Tour paused manually');
-      return;
-    }
-
-    setTourStatus(true, 'Guided tour resumed');
-
-    const currentIndex = getMostVisibleSectionIndex();
-    state.currentSection = currentIndex;
-    updateProgressDots();
-    applyThemeBySection(sections[currentIndex]?.id);
-
-    const currentSection = getCurrentVisibleSection();
-    state.sliders.forEach(slider => {
-      const active = slider.section === currentSection;
-      slider.setSectionActive(active);
-      if (active) slider.ensureAutoplay();
-    });
-
-    scheduleNextScene();
-  });
-}
-
-if (restartTourBtn) {
-  restartTourBtn.addEventListener('click', (event) => {
-    event.stopPropagation();
-
-    state.pausedByUser = false;
-    state.guidedEnabled = true;
-
-    clearTimeout(state.sceneTimer);
-    clearTimeout(state.resumeTimer);
-    stopAnimatedScroll();
-
-    setTourStatus(true, 'Tour restarted');
-    scrollToSection(0);
-
-    setTimeout(() => {
-      state.currentSection = 0;
-      updateProgressDots();
-      applyThemeBySection('hero');
-
-      const currentSection = getCurrentVisibleSection();
-      state.sliders.forEach(slider => {
-        const active = slider.section === currentSection;
-        slider.setSectionActive(active);
-        if (active) slider.ensureAutoplay();
-      });
-
-      scheduleNextScene();
-    }, 700);
-  });
-}
-
-if (exploreFreeBtn) {
-  exploreFreeBtn.addEventListener('click', (event) => {
-    event.stopPropagation();
-
-    state.guidedEnabled = false;
-    state.pausedByUser = true;
-    clearTimeout(state.sceneTimer);
-    clearTimeout(state.resumeTimer);
-    stopAnimatedScroll();
-    state.sliders.forEach(slider => slider.pauseAutoplay());
-    setTourStatus(false, 'Explore freely — no auto scroll');
-  });
-}
-
 if (getDirectionsBtn) {
   getDirectionsBtn.addEventListener('click', openDirectionsExperience);
 }
@@ -1095,30 +903,40 @@ if (useMyLocationBtn) {
   useMyLocationBtn.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    onUserInteraction(event);
     getLocationAndRoute();
   });
 }
 
-// ========== SCROLL / INPUT ==========
+// ========== SCROLL ==========
 let ticking = false;
 
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      syncVisibleSection();
-      ticking = false;
-    });
-    ticking = true;
-  }
-}, { passive: true });
+window.addEventListener(
+  'scroll',
+  () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        syncVisibleSection();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  },
+  { passive: true }
+);
 
-['wheel', 'touchstart', 'keydown'].forEach(eventName => {
-  window.addEventListener(eventName, onUserInteraction, { passive: true });
-});
+// ========== SERVICE WORKER ==========
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
 
-if (main) {
-  main.addEventListener('pointerdown', onUserInteraction, { passive: true });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('Service Worker registered:', registration.scope);
+      })
+      .catch((error) => {
+        console.error('Service Worker registration failed:', error);
+      });
+  });
 }
 
 // ========== INIT ==========
@@ -1126,6 +944,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildProgressDots();
   initFadeUps();
   initCountdowns();
+  initMediaObserver();
 
   state.sliders = [...document.querySelectorAll('[data-slider]')].map(createExperienceSlider);
 
@@ -1133,11 +952,10 @@ document.addEventListener('DOMContentLoaded', () => {
   applyThemeBySection(getCurrentVisibleSection()?.id || 'hero');
 
   const currentSection = getCurrentVisibleSection();
-  state.sliders.forEach(slider => {
+  state.sliders.forEach((slider) => {
     slider.setSectionActive(slider.section === currentSection);
   });
 
   initMap();
-  setTourStatus(true, 'Guided tour active');
-  scheduleNextScene();
+  registerServiceWorker();
 });
