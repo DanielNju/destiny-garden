@@ -1,12 +1,13 @@
 // ======================================================
-// DESTINY GARDENS - MOBILE OPTIMIZED VERSION
+// DESTINY GARDENS - ULTRA FAST MOBILE FOCUSED VERSION
 // UPDATED VERSION
-// - Guided auto-scroll removed
-// - Main sliders autoplay only in active/visible section
-// - Mini slides still rotate normally
-// - Heavy videos lazy-load
-// - Service worker registration added
-// - Map still works
+// - Only active card video plays
+// - All other videos pause
+// - View More pauses everything and focuses on modal
+// - Swipe support added
+// - Loads only what is needed
+// - Active visible section only
+// - Service worker registration kept
 // ======================================================
 
 // ========== DOM ==========
@@ -33,7 +34,8 @@ const routeInfoDiv = document.getElementById('route-info');
 // ========== GLOBAL STATE ==========
 const state = {
   currentSection: 0,
-  sliders: []
+  sliders: [],
+  modalOpen: false
 };
 
 // ========== MAP STATE ==========
@@ -162,7 +164,7 @@ function syncVisibleSection() {
     applyThemeBySection(sections[bestIndex]?.id);
 
     state.sliders.forEach((slider) => {
-      slider.setSectionActive(slider.section === sections[bestIndex]);
+      slider.setSectionActive(!state.modalOpen && slider.section === sections[bestIndex]);
     });
 
     if (sections[bestIndex]?.id === 'map') {
@@ -404,24 +406,48 @@ function openDirectionsExperience(event) {
 }
 
 // ========== MEDIA HELPERS ==========
-function loadVideoSource(video) {
+function getSourceElement(video) {
+  return video ? video.querySelector('source') : null;
+}
+
+function getDeferredSrc(video) {
+  const source = getSourceElement(video);
+  return source?.dataset?.src || '';
+}
+
+function isVideoLoaded(video) {
+  const source = getSourceElement(video);
+  return !!(source && source.src);
+}
+
+function loadVideoSource(video, preloadMode = 'metadata') {
   if (!video) return;
 
-  const source = video.querySelector('source');
+  const source = getSourceElement(video);
   if (!source) return;
 
   const deferredSrc = source.dataset.src;
-  if (deferredSrc && !source.src) {
+  if (!deferredSrc) return;
+
+  if (video.preload !== preloadMode) {
+    video.preload = preloadMode;
+  }
+
+  if (!source.src) {
     source.src = deferredSrc;
     video.load();
   }
+}
+
+function primeVideo(video) {
+  loadVideoSource(video, 'metadata');
 }
 
 function playVideo(video) {
   if (!video) return;
 
   try {
-    loadVideoSource(video);
+    loadVideoSource(video, 'auto');
     const promise = video.play();
     if (promise && typeof promise.catch === 'function') {
       promise.catch(() => {});
@@ -436,13 +462,35 @@ function pauseVideo(video) {
 
   try {
     video.pause();
+    video.currentTime = video.currentTime || 0;
   } catch (error) {
     /* ignore */
   }
 }
 
+function pauseAllInlineVideos(except = null) {
+  document.querySelectorAll('video').forEach((video) => {
+    if (video !== except) {
+      pauseVideo(video);
+    }
+  });
+}
+
+function pauseAllSliders() {
+  state.sliders.forEach((slider) => {
+    slider.pauseAutoplay();
+  });
+}
+
+function resumeOnlyVisibleSlider() {
+  const currentSection = getCurrentVisibleSection();
+  state.sliders.forEach((slider) => {
+    slider.setSectionActive(!state.modalOpen && slider.section === currentSection);
+  });
+}
+
 function initMediaObserver() {
-  const mediaItems = document.querySelectorAll('video.mini-scene, video.hero-video, video');
+  const mediaItems = document.querySelectorAll('video.hero-video, .gallery-card video');
 
   if (!mediaItems.length) return;
 
@@ -451,16 +499,16 @@ function initMediaObserver() {
       entries.forEach((entry) => {
         const video = entry.target;
 
-        if (entry.isIntersecting) {
-          loadVideoSource(video);
+        if (entry.isIntersecting && !state.modalOpen) {
+          primeVideo(video);
         } else {
           pauseVideo(video);
         }
       });
     },
     {
-      rootMargin: '200px 0px',
-      threshold: 0.15
+      rootMargin: '120px 0px',
+      threshold: 0.2
     }
   );
 
@@ -483,12 +531,20 @@ function createExperienceSlider(shell) {
   let autoTimer = null;
   let sectionIsActive = false;
   let pendingSceneTimeout = null;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchDeltaX = 0;
+  let touchDeltaY = 0;
 
   const miniRotatorTimers = new WeakMap();
 
-  const MINI_SCENE_DELAY = type === 'events' ? 3600 : 3900;
-  const MINI_SCENE_END_HOLD = type === 'events' ? 1800 : 2000;
-  const CARD_REVEAL_DELAY = 600;
+  const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
+  const MINI_SCENE_DELAY = IS_MOBILE
+    ? (type === 'events' ? 4600 : 5200)
+    : (type === 'events' ? 3600 : 3900);
+  const MINI_SCENE_END_HOLD = IS_MOBILE ? 2200 : (type === 'events' ? 1800 : 2000);
+  const CARD_REVEAL_DELAY = 350;
+  const SWIPE_THRESHOLD = 45;
 
   if (totalSpan) totalSpan.textContent = slides.length;
 
@@ -508,7 +564,9 @@ function createExperienceSlider(shell) {
       const sceneItems = slide.querySelectorAll('.mini-scene');
       sceneItems.forEach((item) => {
         item.classList.remove('showing');
-        if (item.tagName === 'VIDEO') pauseVideo(item);
+        if (item.tagName === 'VIDEO') {
+          pauseVideo(item);
+        }
       });
 
       const sceneMedia = slide.querySelector('.scene-media');
@@ -535,7 +593,7 @@ function createExperienceSlider(shell) {
       item.classList.toggle('showing', active);
 
       if (item.tagName === 'VIDEO') {
-        if (active && sectionIsActive) {
+        if (active && sectionIsActive && !state.modalOpen) {
           playVideo(item);
         } else {
           pauseVideo(item);
@@ -553,6 +611,11 @@ function createExperienceSlider(shell) {
     if (!items.length || !sceneMedia) return;
 
     let sceneIndex = 0;
+    const firstItem = items[0];
+
+    if (firstItem?.tagName === 'VIDEO') {
+      primeVideo(firstItem);
+    }
 
     pendingSceneTimeout = setTimeout(() => {
       if (!slide.classList.contains('active')) return;
@@ -564,6 +627,12 @@ function createExperienceSlider(shell) {
     if (items.length > 1) {
       const timer = setInterval(() => {
         sceneIndex = (sceneIndex + 1) % items.length;
+        const nextItem = items[sceneIndex];
+
+        if (nextItem?.tagName === 'VIDEO') {
+          primeVideo(nextItem);
+        }
+
         showSceneItem(slide, items, sceneIndex);
       }, MINI_SCENE_DELAY);
 
@@ -584,7 +653,7 @@ function createExperienceSlider(shell) {
 
     stopMiniRotators();
 
-    if (sectionIsActive) {
+    if (sectionIsActive && !state.modalOpen) {
       startMiniSceneCycle(slides[currentIndex]);
     }
   }
@@ -602,7 +671,7 @@ function createExperienceSlider(shell) {
   function scheduleCurrentSlideAdvance() {
     clearTimeout(autoTimer);
 
-    if (!sectionIsActive) return;
+    if (!sectionIsActive || state.modalOpen) return;
 
     autoTimer = setTimeout(() => {
       currentIndex = (currentIndex + 1) % slides.length;
@@ -639,9 +708,41 @@ function createExperienceSlider(shell) {
 
     if (!active) {
       pauseAutoplay();
-    } else {
+    } else if (!state.modalOpen) {
       resumeAutoplay();
     }
+  }
+
+  function handleTouchStart(event) {
+    if (!event.touches || !event.touches.length) return;
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+    touchDeltaX = 0;
+    touchDeltaY = 0;
+  }
+
+  function handleTouchMove(event) {
+    if (!event.touches || !event.touches.length) return;
+    touchDeltaX = event.touches[0].clientX - touchStartX;
+    touchDeltaY = event.touches[0].clientY - touchStartY;
+  }
+
+  function handleTouchEnd() {
+    const absX = Math.abs(touchDeltaX);
+    const absY = Math.abs(touchDeltaY);
+
+    if (absX > SWIPE_THRESHOLD && absX > absY) {
+      if (touchDeltaX < 0) {
+        next();
+      } else {
+        prev();
+      }
+    }
+
+    touchStartX = 0;
+    touchStartY = 0;
+    touchDeltaX = 0;
+    touchDeltaY = 0;
   }
 
   if (prevBtn) {
@@ -656,6 +757,12 @@ function createExperienceSlider(shell) {
       event.stopPropagation();
       next();
     });
+  }
+
+  if (shell) {
+    shell.addEventListener('touchstart', handleTouchStart, { passive: true });
+    shell.addEventListener('touchmove', handleTouchMove, { passive: true });
+    shell.addEventListener('touchend', handleTouchEnd, { passive: true });
   }
 
   slides.forEach((slide) => {
@@ -713,8 +820,62 @@ function initCountdowns() {
 }
 
 // ========== MODAL ==========
+function stopEverythingForFocusedViewing() {
+  state.modalOpen = true;
+  pauseAllSliders();
+  pauseAllInlineVideos();
+}
+
+function renderModalMainMedia(scene, scenes, mainTitle) {
+  const modalMainPreview = document.getElementById('modalMainPreview');
+  const modalThumbStrip = document.getElementById('modalThumbStrip');
+
+  if (!modalMainPreview || !modalThumbStrip) return;
+
+  modalMainPreview.innerHTML = '';
+
+  modalTitle.textContent = scene?.dataset.title || mainTitle;
+  modalDescription.textContent = scene?.dataset.description || '';
+  modalPrice.textContent = scene?.dataset.price || 'Contact us';
+
+  if (scene?.tagName === 'VIDEO') {
+    loadVideoSource(scene, 'auto');
+
+    const video = document.createElement('video');
+    const source = scene.querySelector('source');
+
+    video.src = scene.currentSrc || source?.src || source?.dataset?.src || '';
+    video.controls = true;
+    video.autoplay = true;
+    video.muted = false;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.className = 'modal-fit-media';
+
+    modalMainPreview.appendChild(video);
+
+    const promise = video.play();
+    if (promise && typeof promise.catch === 'function') {
+      promise.catch(() => {});
+    }
+  } else {
+    const img = document.createElement('img');
+    img.src = scene?.src || '';
+    img.alt = scene?.dataset?.title || mainTitle;
+    img.className = 'modal-fit-media';
+    modalMainPreview.appendChild(img);
+  }
+
+  [...modalThumbStrip.children].forEach((thumb, index) => {
+    thumb.classList.toggle('active', scenes[index] === scene);
+  });
+}
+
 function openModalFromSlide(slide, type = 'activities') {
   if (!modal || !modalMedia || !modalTitle || !modalDescription || !modalPrice || !modalTag) return;
+
+  stopEverythingForFocusedViewing();
 
   const scenes = [...slide.querySelectorAll('.mini-scene')];
   const mainTitle = slide.querySelector('.experience-intro h3')?.textContent || 'Experience';
@@ -732,44 +893,7 @@ function openModalFromSlide(slide, type = 'activities') {
     </div>
   `;
 
-  const modalMainPreview = document.getElementById('modalMainPreview');
   const modalThumbStrip = document.getElementById('modalThumbStrip');
-
-  function renderMainMedia(scene) {
-    modalMainPreview.innerHTML = '';
-
-    modalTitle.textContent = scene?.dataset.title || mainTitle;
-    modalDescription.textContent = scene?.dataset.description || '';
-    modalPrice.textContent = scene?.dataset.price || 'Contact us';
-
-    if (scene.tagName === 'VIDEO') {
-      loadVideoSource(scene);
-
-      const video = document.createElement('video');
-      const source = scene.querySelector('source');
-
-      video.src = scene.currentSrc || source?.src || '';
-      video.controls = true;
-      video.autoplay = true;
-      video.muted = true;
-      video.loop = true;
-      video.playsInline = true;
-      video.className = 'modal-fit-media';
-
-      modalMainPreview.appendChild(video);
-    } else {
-      const img = document.createElement('img');
-      img.src = scene.src;
-      img.alt = scene.dataset.title || mainTitle;
-      img.className = 'modal-fit-media';
-
-      modalMainPreview.appendChild(img);
-    }
-
-    [...modalThumbStrip.children].forEach((thumb, index) => {
-      thumb.classList.toggle('active', scenes[index] === scene);
-    });
-  }
 
   scenes.forEach((scene, index) => {
     const thumb = document.createElement('button');
@@ -778,12 +902,12 @@ function openModalFromSlide(slide, type = 'activities') {
     thumb.setAttribute('aria-label', scene.dataset.title || `Preview ${index + 1}`);
 
     if (scene.tagName === 'VIDEO') {
-      loadVideoSource(scene);
+      primeVideo(scene);
 
       const video = document.createElement('video');
       const source = scene.querySelector('source');
 
-      video.src = scene.currentSrc || source?.src || '';
+      video.src = scene.currentSrc || source?.src || source?.dataset?.src || '';
       video.muted = true;
       video.playsInline = true;
       video.preload = 'metadata';
@@ -800,18 +924,21 @@ function openModalFromSlide(slide, type = 'activities') {
     }
 
     thumb.addEventListener('click', () => {
-      renderMainMedia(scene);
+      pauseAllInlineVideos();
+      renderModalMainMedia(scene, scenes, mainTitle);
     });
 
     modalThumbStrip.appendChild(thumb);
   });
 
-  renderMainMedia(activeScene);
+  renderModalMainMedia(activeScene, scenes, mainTitle);
   modal.classList.add('show');
 }
 
 function openMemoryModal(card) {
   if (!modal || !modalMedia || !modalTitle || !modalDescription || !modalPrice || !modalTag) return;
+
+  stopEverythingForFocusedViewing();
 
   modalTitle.textContent = card.dataset.title || 'Memory';
   modalDescription.textContent = card.dataset.description || '';
@@ -824,10 +951,16 @@ function openMemoryModal(card) {
     video.src = card.dataset.src || '';
     video.controls = true;
     video.autoplay = true;
-    video.muted = true;
+    video.muted = false;
     video.loop = true;
     video.playsInline = true;
+    video.preload = 'auto';
     modalMedia.appendChild(video);
+
+    const promise = video.play();
+    if (promise && typeof promise.catch === 'function') {
+      promise.catch(() => {});
+    }
   } else {
     const img = document.createElement('img');
     img.src = card.dataset.src || '';
@@ -840,8 +973,12 @@ function openMemoryModal(card) {
 
 function closeModal() {
   if (!modal || !modalMedia) return;
+
+  pauseAllInlineVideos();
   modal.classList.remove('show');
   modalMedia.innerHTML = '';
+  state.modalOpen = false;
+  resumeOnlyVisibleSlider();
 }
 
 if (modalCloseBtn) {
@@ -915,7 +1052,9 @@ window.addEventListener(
   () => {
     if (!ticking) {
       requestAnimationFrame(() => {
-        syncVisibleSection();
+        if (!state.modalOpen) {
+          syncVisibleSection();
+        }
         ticking = false;
       });
       ticking = true;
