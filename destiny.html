@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Destiny Gardens | Guided Experience</title>
+  <title>Destiny Gardens | Experience</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -22,14 +21,18 @@
 <body>
   <div class="tour-status" id="tourStatus">
     <span class="tour-dot"></span>
-    <span id="tourLabel">Guided tour is active</span>
+    <span id="tourLabel">Destiny Gardens Experience</span>
     <div class="progress" id="progressDots"></div>
   </div>
 
   <div class="floating-actions">
-    <button id="toggleTourBtn" class="float-btn" type="button">⏸ Pause Tour</button>
     <a class="float-btn" href="#booking">📅 Book Now</a>
-    <a class="float-btn" href="https://wa.me/254742462900?text=Hi%20Destiny%20Gardens%2C%20I%20want%20to%20book." target="_blank" rel="noopener">💬 WhatsApp</a>
+    <a
+      class="float-btn"
+      href="https://wa.me/254742462900?text=Hi%20Destiny%20Gardens%2C%20I%20want%20to%20book."
+      target="_blank"
+      rel="noopener"
+    >💬 WhatsApp</a>
   </div>
 
   <main id="main">
@@ -37,8 +40,16 @@
     <section class="scene" id="hero">
       <div class="scene-inner hero-grid">
         <div class="hero-visual fade-up">
-          <video autoplay muted loop playsinline preload="metadata" poster="hero.png">
-            <source src="weeked.mp4" type="video/mp4">
+          <video
+            class="hero-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="hero.png"
+          >
+            <source data-src="weeked.mp4" type="video/mp4">
           </video>
 
           <div class="hero-overlay">
@@ -71,12 +82,12 @@
 
           <div class="mini-map">
             <iframe
-             src="https://www.google.com/maps?q=-1.1525083,36.8962652&z=16&output=embed"
-            loading="lazy"
-            allowfullscreen
-            referrerpolicy="no-referrer-when-downgrade"
-             title="Destiny Gardens map preview"
-           ></iframe>
+              src="https://www.google.com/maps?q=-1.1525083,36.8962652&z=16&output=embed"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Destiny Gardens map preview"
+            ></iframe>
           </div>
 
           <div class="cta-row">
@@ -97,7 +108,7 @@
             <div class="eyebrow">Upcoming Events</div>
             <h2>What is happening next.</h2>
             <p class="section-copy">
-              let's recreate and create meomories together through the following upcoming events.
+              Let's recreate and create memories together through the following upcoming events.
             </p>
           </div>
 
@@ -108,7 +119,7 @@
           </div>
         </div>
 
-        <div class="experience-shell fade-up" data-slider="events" data-slider-type="events">
+        <div class="experience-shell fade-up" data-slider data-slider-type="events">
           <div class="experience-track">
             <!-- EVENT 1 -->
             <article class="experience-slide active">
@@ -131,20 +142,22 @@
                         src="swm1.png"
                         alt="Pool party crowd"
                         data-title="Main Pool Entry"
-                        data-description="A lively pool setup with music, energy, and open seating for the weekend ."
+                        data-description="A lively pool setup with music, energy, and open seating for the weekend."
                         data-price="KES 800 Entry">
+
                       <video
                         class="mini-scene"
                         muted
                         loop
                         playsinline
-                        preload="metadata"
-                        poster="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=900&q=80"
+                        preload="none"
+                        poster="swm1.png"
                         data-title="Live Pool Vibe"
-                        data-description="Swimming,  and a stronger  event atmosphere ."
+                        data-description="Swimming and a stronger event atmosphere."
                         data-price="KES 800 Entry">
-                        <source src="event21.mp4" type="video/mp4">
+                        <source data-src="event21.mp4" type="video/mp4">
                       </video>
+
                       <img
                         class="mini-scene"
                         src="chilling3.png"
@@ -162,7 +175,7 @@
 
                       <h4 class="scene-title">Main Pool Entry</h4>
                       <p class="scene-description">
-                        A lively pool setup with music, energy, and open seating for the
+                        A lively pool setup with music, energy, and open seating for the weekend.
                       </p>
 
                       <div class="scene-actions">
@@ -179,14 +192,14 @@
             <article class="experience-slide">
               <div class="experience-stage">
                 <div class="experience-bg">
-                  <img class="experience-bg-media showing" src="upe3.png" alt=" fun day ">
+                  <img class="experience-bg-media showing" src="upe3.png" alt="Fun day">
                 </div>
 
                 <div class="experience-overlay">
                   <div class="experience-intro">
                     <span class="badge">Genz Event</span>
-                    <h3>Bikin cocktail</h3>
-                    <p>Party After party</p>
+                    <h3>Bikin Cocktail</h3>
+                    <p>Party after party.</p>
                   </div>
 
                   <div class="scene-card">
@@ -194,29 +207,31 @@
                       <img
                         class="mini-scene showing"
                         src="part1.png"
-                        alt="pool fun"
+                        alt="Pool fun"
                         data-title="Genz Life Experience"
-                        data-description="enough space for both adults and kids to enjoy the day."
+                        data-description="Enough space for both adults and kids to enjoy the day."
                         data-price="KES 500 Per Person">
+
                       <video
                         class="mini-scene"
                         muted
                         loop
-                        preload="metadata"
+                        preload="none"
                         playsinline
-                        poster="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=900&q=80"
+                        poster="part1.png"
                         data-title="Live Pool Vibe"
-                        data-description=" event atmosphere looks like quit energetic and entertaning."
+                        data-description="The event atmosphere looks energetic and entertaining."
                         data-price="KES 300 Entry">
-                        <source src="party2.mp4" type="video/mp4">
+                        <source data-src="party2.mp4" type="video/mp4">
                       </video>
+
                       <img
                         class="mini-scene"
                         src="food1.png"
                         alt="Food section"
-                        data-title=" The Food "
-                        data-description="Don't worry because meals, drinks, and sitting areas are part of the full experience."
-                        data-price="From 200 Per ">
+                        data-title="The Food"
+                        data-description="Meals, drinks, and sitting areas are part of the full experience."
+                        data-price="From KES 200">
                     </div>
 
                     <div class="scene-card-body">
@@ -263,24 +278,26 @@
                         data-title="Night Entry Mood"
                         data-description="The event opens with evening lights, strong ambience, and a polished night atmosphere."
                         data-price="KES 1000 Entry">
+
                       <video
                         class="mini-scene"
                         muted
                         loop
-                        preload="metadata"
+                        preload="none"
                         playsinline
-                        poster="nightv.mp4"
+                        poster="night1.png"
                         data-title="Night Motion Preview"
-                        data-description=" emotional feeling of the event before booking."
+                        data-description="The emotional feeling of the event before booking."
                         data-price="KES 1000 Entry">
-                        <source src="nightv.mp4" type="video/mp4">
+                        <source data-src="nightv.mp4" type="video/mp4">
                       </video>
+
                       <img
                         class="mini-scene"
                         src="night1.gif"
                         alt="Drinks at night"
                         data-title="Drinks & Social Corners"
-                        data-description="you can move between the main event energy and quieter drink corners without losing the mood."
+                        data-description="You can move between the main event energy and quieter drink corners without losing the mood."
                         data-price="KES 1000 Entry">
                     </div>
 
@@ -314,8 +331,8 @@
 
                 <div class="experience-overlay">
                   <div class="experience-intro">
-                    <span class="badge">mugithi day </span>
-                    <h3>mugithi live</h3>
+                    <span class="badge">Mugithi Day</span>
+                    <h3>Mugithi Live</h3>
                     <p>Outdoor bonding, food, fresh air, and music.</p>
                   </div>
 
@@ -324,16 +341,17 @@
                       <img
                         class="mini-scene showing"
                         src="music.jpg"
-                        alt="music"
-                        data-title="music and entertainment"
+                        alt="Music"
+                        data-title="Music and Entertainment"
                         data-description="A clean outdoor setup for dancing and enjoying the music."
                         data-price="From KES 1000 Per Person">
+
                       <img
                         class="mini-scene"
                         src="music2.jpg"
                         alt="The vibe"
-                        data-title="mugithi Day"
-                        data-description="feel free to enjoy and having fun"
+                        data-title="Mugithi Day"
+                        data-description="Feel free to enjoy and have fun."
                         data-price="From KES 1000 Per Person">
                     </div>
 
@@ -343,7 +361,7 @@
                         <span class="countdown-badge" data-countdown="2026-04-18T09:00:00">Starts in 00d 00h 00m</span>
                       </div>
 
-                      <h4 class="scene-title">Mugithi live </h4>
+                      <h4 class="scene-title">Mugithi Live</h4>
                       <p class="scene-description">
                         A clean outdoor setup for us to settle in, connect, and prepare for the experience.
                       </p>
@@ -378,7 +396,7 @@
             <div class="eyebrow">Activities</div>
             <h2>Activity That We Offer</h2>
             <p class="section-copy">
-              This is where we create unforgettable memories feel free to explore and enjoy
+              This is where we create unforgettable memories. Feel free to explore and enjoy.
             </p>
           </div>
 
@@ -389,7 +407,7 @@
           </div>
         </div>
 
-        <div class="experience-shell fade-up" data-slider="activities" data-slider-type="activities">
+        <div class="experience-shell fade-up" data-slider data-slider-type="activities">
           <div class="experience-track">
             <!-- ACTIVITY 1 -->
             <article class="experience-slide active">
@@ -414,17 +432,20 @@
                         data-title="Adult Swimming Pool"
                         data-description="A calm and refreshing swimming setup for adults who want more space and a quieter feel."
                         data-price="KES 500">
+
                       <video
                         class="mini-scene"
                         muted
                         loop
-                        preload="metadata"
+                        preload="none"
                         playsinline
-                        data-title="kids swimming pool"
-                        data-description="A safe place where kids can swim play and enjoy"
-                        data-price="KES 300 ">
-                        <source src="kidswm.mp4" type="video/mp4">
+                        poster="swm1.png"
+                        data-title="Kids Swimming Pool"
+                        data-description="A safe place where kids can swim, play, and enjoy."
+                        data-price="KES 300">
+                        <source data-src="kidswm.mp4" type="video/mp4">
                       </video>
+
                       <img
                         class="mini-scene"
                         src="1swp.jpg"
@@ -476,22 +497,25 @@
                         src="foodm.png"
                         alt="Family dining"
                         data-title="Family Dining Setup"
-                        data-description="variety of meals for us to enjoy"
+                        data-description="Variety of meals for us to enjoy."
                         data-price="From KES 700">
+
                       <img
                         class="mini-scene"
                         src="food2.png"
                         alt="Prepared meals"
                         data-title="Fresh Restaurant Meals"
-                        data-description="Prepared meals for you to devour."
+                        data-description="Prepared meals for you to enjoy."
                         data-price="From KES 500">
+
                       <img
                         class="mini-scene"
                         src="drink1.png"
                         alt="Drinks served"
                         data-title="Drinks & Refreshments"
-                        data-description="Cold drinks and lighter refreshments help's you feel the dining side of the place immediately."
+                        data-description="Cold drinks and lighter refreshments help you feel the dining side of the place immediately."
                         data-price="From KES 150">
+
                       <img
                         class="mini-scene"
                         src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=900&q=80"
@@ -545,13 +569,15 @@
                         data-title="Casual Hangout Atmosphere"
                         data-description="A softer social setup where you can talk, sit back, and stay in the environment longer."
                         data-price="Free with Entry">
+
                       <img
                         class="mini-scene"
                         src="chilling4.png"
                         alt="Drinks"
                         data-title="Drinks While Relaxing"
-                        data-description="chilling and drinking "
+                        data-description="Chilling and drinking."
                         data-price="From KES 150">
+
                       <img
                         class="mini-scene"
                         src="chilling2.png"
@@ -603,21 +629,23 @@
                         src="kidp1.png"
                         alt="Slides"
                         data-title="Slides Experience"
-                        data-description="A playful starting point where kids can safely enjoy and explore"
+                        data-description="A playful starting point where kids can safely enjoy and explore."
                         data-price="KES 200">
+
                       <img
                         class="mini-scene"
                         src="kidp2.png"
                         alt="Kids ride"
                         data-title="Mini Rides & Movement"
-                        data-description="A very safe playground for your kid"
+                        data-description="A very safe playground for your kid."
                         data-price="KES 250">
+
                       <img
                         class="mini-scene"
                         src="fhp2.png"
                         alt="Family play area"
                         data-title="Family Play Environment"
-                        data-description="Parents can see where their children’s are and still feel the vibe"
+                        data-description="Parents can see where their children are and still feel the vibe."
                         data-price="From KES 200">
                     </div>
 
@@ -629,7 +657,7 @@
 
                       <h4 class="scene-title">Slides Experience</h4>
                       <p class="scene-description">
-                        A playful starting point where kids can enjoy and explore
+                        A playful starting point where kids can enjoy and explore.
                       </p>
 
                       <div class="scene-actions">
@@ -665,6 +693,7 @@
                         data-title="Wedding Setup"
                         data-description="A premium outdoor layout where we can host beautiful formal moments."
                         data-price="From KES 25,000">
+
                       <img
                         class="mini-scene"
                         src="eventb.png"
@@ -672,6 +701,7 @@
                         data-title="Birthday Celebration Setup"
                         data-description="A brighter social setup for families, friends, and more playful celebrations."
                         data-price="From KES 8,000">
+
                       <img
                         class="mini-scene"
                         src="eventb1.png"
@@ -719,29 +749,32 @@
                   <div class="scene-card">
                     <div class="scene-media">
                       <video
-                        class="mini-scene"
+                        class="mini-scene showing"
                         muted
                         loop
-                        preload="metadata"
+                        preload="none"
                         playsinline
-                        data-title="Team Bulding Sestup"
-                        data-description="A strong o scene for groups, companies, and organized teams that want outdoor energy"
-                        data-price="From 1000 ">
-                        <source src="t2.mp4" type="video/mp4">
+                        poster="t1.png"
+                        data-title="Team Building Setup"
+                        data-description="A strong opening scene for groups, companies, and organized teams that want outdoor energy."
+                        data-price="From KES 1000">
+                        <source data-src="t2.mp4" type="video/mp4">
                       </video>
+
                       <img
                         class="mini-scene"
                         src="social.png"
                         alt="Open group social moment"
                         data-title="Breakout & Social Moments"
-                        data-description=" a more realistic feeling of how the team can relax between activities."
+                        data-description="A more realistic feeling of how the team can relax between activities."
                         data-price="From KES 1000 Per Person">
+
                       <img
                         class="mini-scene"
                         src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80"
                         alt="Food for group"
                         data-title="Meals During Team Activities"
-                        data-description="Food support to keep you going"
+                        data-description="Food support to keep you going."
                         data-price="From KES 1000 Per Person">
                     </div>
 
@@ -751,7 +784,7 @@
                         <span class="scene-note">Best for Groups</span>
                       </div>
 
-                      <h4 class="scene-title">Team Bonding Setup</h4>
+                      <h4 class="scene-title">Team Building Setup</h4>
                       <p class="scene-description">
                         A strong opening scene for groups, companies, and organized teams that want outdoor energy.
                       </p>
@@ -786,7 +819,7 @@
             <div class="eyebrow">Past Moments</div>
             <h2>Past moments</h2>
             <p class="section-copy">
-              Some of our unforgettable memories
+              Some of our unforgettable memories.
             </p>
           </div>
         </div>
@@ -814,8 +847,8 @@
             data-price="From KES 500"
             data-type="video"
             data-src="weeked.mp4">
-            <video muted autoplay loop preload="metadata" playsinline>
-              <source src="weeked.mp4" type="video/mp4">
+            <video class="hero-video" muted autoplay loop preload="none" playsinline poster="hero.png">
+              <source data-src="weeked.mp4" type="video/mp4">
             </video>
             <div class="overlay">
               <span class="badge">Weekend</span>
@@ -831,8 +864,8 @@
             data-price="Custom setup available"
             data-type="video"
             data-src="couple.mp4">
-            <video muted autoplay preload="metadata" loop playsinline>
-              <source src="couple.mp4" type="video/mp4">
+            <video class="hero-video" muted autoplay preload="none" loop playsinline poster="chillin1.png">
+              <source data-src="couple.mp4" type="video/mp4">
             </video>
             <div class="overlay">
               <span class="badge">Couples</span>
@@ -845,63 +878,63 @@
     </section>
 
     <!-- MAP -->
-<section class="scene" id="map">
-  <div class="scene-inner map-layout">
-    <div class="map-card fade-up">
-      <div class="map-shell">
-        <div id="map-display" aria-label="Destiny Gardens live directions map"></div>
+    <section class="scene" id="map">
+      <div class="scene-inner map-layout">
+        <div class="map-card fade-up">
+          <div class="map-shell">
+            <div id="map-display" aria-label="Destiny Gardens live directions map"></div>
 
-        <div class="map-info-box">
-          <div id="map-status" class="map-status">Showing Destiny Gardens location.</div>
-          <div id="user-location" class="map-detail">Location access not used yet.</div>
-          <div id="route-info" class="map-detail">Tap “Use My Location” or “Get Directions” to load your route.</div>
+            <div class="map-info-box">
+              <div id="map-status" class="map-status">Showing Destiny Gardens location.</div>
+              <div id="user-location" class="map-detail">Location access not used yet.</div>
+              <div id="route-info" class="map-detail">Tap “Use My Location” or “Get Directions” to load your route.</div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <aside class="panel fade-up">
-      <div>
-        <div class="eyebrow">Map & Directions</div>
-        <h2>Easy to find. Easy to act on.</h2>
-        <p class="section-copy">
-          Find Destiny Gardens fast, see your route clearly, and still open the full
-          location in Google Maps whenever you want.
-        </p>
-      </div>
+        <aside class="panel fade-up">
+          <div>
+            <div class="eyebrow">Map & Directions</div>
+            <h2>Easy to find. Easy to act on.</h2>
+            <p class="section-copy">
+              Find Destiny Gardens fast, see your route clearly, and still open the full
+              location in Google Maps whenever you want.
+            </p>
+          </div>
 
-      <div class="contact-grid">
-        <div class="contact-item">
-          <small>Location</small>
-          <strong>Destiny Gardens, Ruiru, Kiambu County</strong>
-        </div>
-        <div class="contact-item">
-          <small>Best For</small>
-          <strong>Events, family days, swimming, dining, team outings</strong>
-        </div>
-        <div class="contact-item">
-          <small>Travel Feel</small>
-          <strong>A quick green escape near town</strong>
-        </div>
-      </div>
+          <div class="contact-grid">
+            <div class="contact-item">
+              <small>Location</small>
+              <strong>Destiny Gardens, Ruiru, Kiambu County</strong>
+            </div>
+            <div class="contact-item">
+              <small>Best For</small>
+              <strong>Events, family days, swimming, dining, team outings</strong>
+            </div>
+            <div class="contact-item">
+              <small>Travel Feel</small>
+              <strong>A quick green escape near town</strong>
+            </div>
+          </div>
 
-      <div class="cta-row">
-        <button class="btn" type="button" id="useMyLocationBtn">Use My Location</button>
-        <a
-          class="btn secondary"
-          href="https://www.google.com/maps/dir/?api=1&destination=-1.1525083,36.8962652"
-          target="_blank"
-          rel="noopener"
-        >
-          Open in Google Maps
-        </a>
-      </div>
+          <div class="cta-row">
+            <button class="btn" type="button" id="useMyLocationBtn">Use My Location</button>
+            <a
+              class="btn secondary"
+              href="https://www.google.com/maps/dir/?api=1&destination=-1.1525083,36.8962652"
+              target="_blank"
+              rel="noopener"
+            >
+              Open in Google Maps
+            </a>
+          </div>
 
-      <div class="cta-row">
-        <a class="btn secondary" href="#booking">Book a Visit</a>
+          <div class="cta-row">
+            <a class="btn secondary" href="#booking">Book a Visit</a>
+          </div>
+        </aside>
       </div>
-    </aside>
-  </div>
-</section>
+    </section>
 
     <!-- BOOKING -->
     <section class="scene" id="booking">
@@ -911,7 +944,7 @@
             <div class="eyebrow">Booking</div>
             <h2>BOOKING</h2>
             <p class="section-copy">
-              Now it's your turn to make those memories by visiting us for further information
+              Now it's your turn to make those memories by visiting us for further information.
             </p>
           </div>
 
@@ -931,15 +964,24 @@
           </div>
 
           <div class="cta-row">
-            <a class="btn" href="https://wa.me/254742462900?text=Hi%20Destiny%20Gardens%2C%20I%20want%20to%20book." target="_blank" rel="noopener">Book via WhatsApp</a>
+            <a
+              class="btn"
+              href="https://wa.me/254742462900?text=Hi%20Destiny%20Gardens%2C%20I%20want%20to%20book."
+              target="_blank"
+              rel="noopener"
+            >Book via WhatsApp</a>
             <a class="btn secondary" href="tel:+254742462900">Call Now</a>
           </div>
         </div>
 
         <aside class="panel fade-up">
           <div class="cta-row">
-            <button class="btn" id="restartTourBtn" type="button">Restart Tour</button>
-            <button class="btn secondary" id="exploreFreeBtn" type="button">Explore Freely</button>
+            <a
+              class="btn secondary"
+              href="https://wa.me/254742462900?text=Hi%20Destiny%20Gardens%2C%20I%20want%20to%20book."
+              target="_blank"
+              rel="noopener"
+            >Ask on WhatsApp</a>
           </div>
         </aside>
       </div>
@@ -964,14 +1006,18 @@
         </div>
 
         <div class="cta-row">
-          <a class="btn" href="https://wa.me/254742462900?text=Hi%20Destiny%20Gardens,%20I%20want%20to%20book." target="_blank" rel="noopener">Ask on WhatsApp</a>
+          <a
+            class="btn"
+            href="https://wa.me/254742462900?text=Hi%20Destiny%20Gardens,%20I%20want%20to%20book."
+            target="_blank"
+            rel="noopener"
+          >Ask on WhatsApp</a>
           <button class="btn secondary" id="modalCloseBtn2" type="button">Close</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
