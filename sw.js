@@ -1,89 +1,65 @@
-const V = 'dg-v2',
-  MEDIA = 'dg-media',
-  CORE = [
-    './',
-    'index.html',
-    '404.html',
-    'css/variables.css',
-    'css/reset.css',
-    'css/main.css',
-    'css/navbar.css',
-    'css/hero.css',
-    'css/about.css',
-    'css/experiences.css',
-    'css/events.css',
-    'css/dining.css',
-    'css/entertainment.css',
-    'css/family.css',
-    'css/gallery.css',
-    'css/contact.css',
-    'css/footer.css',
-    'css/animations.css',
-    'css/responsive.css',
-    'js/lazyload.js',
-    'js/hero.js',
-    'js/slider.js',
-    'js/gallery.js',
-    'js/modal.js',
-    'js/animations.js',
-    'js/navbar.js',
-    'js/mobile.js',
-    'js/main.js',
-    'data/site.js',
-    'data/services.js',
-    'data/events.js',
-    'data/gallery.js',
-    'pages/about.html',
-    'pages/events.html',
-    'pages/dining.html',
-    'pages/accommodation.html',
-    'pages/entertainment.html',
-    'pages/family.html',
-    'pages/gallery.html',
-    'pages/contact.html',
-  ]
+// Destiny Garden service worker. Bump VERSION on every deploy to refresh caches.
+const VERSION = 'dg-v1'
+const SHELL = `${VERSION}-shell`
+const RUNTIME = `${VERSION}-runtime`
+const MAX_RUNTIME = 80
+const PRECACHE = [
+  './', 'index.html', '404.html',
+  'pages/about.html', 'pages/dining.html', 'pages/events.html', 'pages/accommodation.html',
+  'pages/entertainment.html', 'pages/family.html', 'pages/gallery.html', 'pages/contact.html',
+  'css/style.css', 'css/pages.css', 'js/main.js', 'js/animations.js',
+]
+const CDN = ['cdnjs.cloudflare.com', 'fonts.googleapis.com', 'fonts.gstatic.com']
+
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(V).then((c) => Promise.allSettled(CORE.map((u) => c.add(u)))))
-  self.skipWaiting()
+  e.waitUntil(
+    caches.open(SHELL)
+      .then((c) => Promise.all(PRECACHE.map((u) => c.add(u).catch(() => {})))) // one missing file won't block install
+      .then(() => self.skipWaiting())
+  )
 })
+
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches
-      .keys()
-      .then((k) =>
-        Promise.all(k.filter((x) => x !== V && x !== MEDIA).map((x) => caches.delete(x)))
-      )
+    caches.keys()
+      .then((ks) => Promise.all(ks.filter((k) => !k.startsWith(VERSION)).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   )
-  self.clients.claim()
 })
+
+const trim = async (name, max) => {
+  const c = await caches.open(name), keys = await c.keys()
+  if (keys.length > max) { await c.delete(keys[0]); trim(name, max) }
+}
+
 self.addEventListener('fetch', (e) => {
-  const r = e.request,
-    u = new URL(r.url)
-  if (r.method !== 'GET' || u.origin !== location.origin || /\.mp4$/.test(u.pathname)) return
-  if (r.mode === 'navigate') {
+  const { request } = e, url = new URL(request.url)
+  if (request.method !== 'GET' || request.headers.has('range')) return // skips video streaming
+  if (/\.(mp4|webm)$/i.test(url.pathname)) return
+  const sameOrigin = url.origin === location.origin
+  if (!sameOrigin && !CDN.includes(url.hostname)) return
+
+  // Pages: network first, then cache, then the 404 page
+  if (request.mode === 'navigate') {
     e.respondWith(
-      fetch(r)
-        .then((x) => {
-          const y = x.clone()
-          caches.open(V).then((c) => c.put(r, y))
-          return x
-        })
-        .catch(() => caches.match(r).then((m) => m || caches.match('404.html')))
+      fetch(request)
+        .then((res) => { const copy = res.clone(); caches.open(SHELL).then((c) => c.put(request, copy)); return res })
+        .catch(() => caches.match(request).then((r) => r || caches.match('404.html')))
     )
     return
   }
-  const n = /\.(png|jpe?g|webp|svg)$/.test(u.pathname) ? MEDIA : V
+
+  // Everything else: serve cached instantly, refresh in the background
   e.respondWith(
-    caches.match(r).then(
-      (m) =>
-        m ||
-        fetch(r).then((x) => {
-          if (x.ok) {
-            const y = x.clone()
-            caches.open(n).then((c) => c.put(r, y))
-          }
-          return x
-        })
-    )
+    caches.match(request).then((hit) => {
+      const net = fetch(request).then((res) => {
+        if (res.ok || res.type === 'opaque') {
+          const copy = res.clone()
+          caches.open(RUNTIME).then((c) => c.put(request, copy)).then(() => trim(RUNTIME, MAX_RUNTIME))
+        }
+        return res
+      }).catch(() => hit)
+      return hit || net
+    })
   )
 })

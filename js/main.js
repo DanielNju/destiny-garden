@@ -49,3 +49,10 @@
     e.preventDefault(); f.reset(); f.querySelector('.form-note').textContent = f.dataset.note
   }))
 })()
+
+// Offline support (needs https or localhost)
+;(() => {
+  if (!('serviceWorker' in navigator)) return
+  const sw = new URL('../sw.js', document.currentScript.src)
+  addEventListener('load', () => navigator.serviceWorker.register(sw).catch(() => {}))
+})()
