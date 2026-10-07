@@ -1,1 +1,8 @@
-.prose{max-width:60ch;padding:0 var(--pad) 64px;margin:auto 0}.prose p+p{margin-top:1em}
+.prose {
+  max-width: 60ch;
+  padding: 0 var(--pad) 64px;
+  margin: auto 0;
+}
+.prose p + p {
+  margin-top: 1em;
+}

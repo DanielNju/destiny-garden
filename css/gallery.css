@@ -1,9 +1,79 @@
-.strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--pad) 8px}
-.tile{border:0;cursor:zoom-in;border-radius:20px;background:#1d332c center/cover no-repeat;aspect-ratio:3/4}
-.strip .tile{flex:0 0 min(72vw,340px);scroll-snap-align:start}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 var(--pad) 64px;max-width:var(--max);margin:auto}
-.gal{background:var(--night);padding:0 0 clamp(72px,10vw,120px);position:relative}
-.gal h2{font:400 clamp(1.9rem,5vw,3rem) var(--serif);color:#eaf1e8;padding:0 var(--pad) 24px;max-width:var(--max);margin:auto}
-.arrows{display:flex;gap:10px;padding:16px var(--pad) 0}.arrows button{width:48px;height:48px;border-radius:50%;border:2px solid var(--gold);background:none;color:var(--gold);font-size:1.2rem;cursor:pointer}
-dialog{border:0;background:none;max-width:96vw;max-height:92vh;padding:0}dialog::backdrop{background:rgba(0,0,0,.85)}
-dialog img{max-height:88vh;border-radius:12px;display:block}dialog button{position:absolute;top:8px;right:8px;font-size:1.4rem;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer}
+.strip {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0 var(--pad) 8px;
+}
+.tile {
+  border: 0;
+  cursor: zoom-in;
+  border-radius: 20px;
+  background: #1d332c center/cover no-repeat;
+  aspect-ratio: 3/4;
+}
+.strip .tile {
+  flex: 0 0 min(72vw, 340px);
+  scroll-snap-align: start;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 0 var(--pad) 64px;
+  max-width: var(--max);
+  margin: auto;
+}
+.gal {
+  background: var(--night);
+  padding: 0 0 clamp(72px, 10vw, 120px);
+  position: relative;
+}
+.gal h2 {
+  font: 400 clamp(1.9rem, 5vw, 3rem) var(--serif);
+  color: #eaf1e8;
+  padding: 0 var(--pad) 24px;
+  max-width: var(--max);
+  margin: auto;
+}
+.arrows {
+  display: flex;
+  gap: 10px;
+  padding: 16px var(--pad) 0;
+}
+.arrows button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: none;
+  color: var(--gold);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+dialog {
+  border: 0;
+  background: none;
+  max-width: 96vw;
+  max-height: 92vh;
+  padding: 0;
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+dialog img {
+  max-height: 88vh;
+  border-radius: 12px;
+  display: block;
+}
+dialog button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1.4rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  cursor: pointer;
+}

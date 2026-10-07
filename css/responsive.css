@@ -1,11 +1,61 @@
-@media(min-width:900px){
-.menu{display:none}
-header nav,header.open nav{display:flex;position:static;inset:auto;background:none;padding:0;overflow:visible;gap:26px;align-items:center}
-header nav a,.ddb{font-size:1rem}.dd{position:relative}
-.ddm{position:absolute;top:100%;left:0;background:var(--leaf);padding:14px 18px;border-radius:14px;min-width:200px;margin:0}
+@media (min-width: 900px) {
+  .menu {
+    display: none;
+  }
+  header nav,
+  header.open nav {
+    display: flex;
+    position: static;
+    inset: auto;
+    background: none;
+    padding: 0;
+    overflow: visible;
+    gap: 26px;
+    align-items: center;
+  }
+  header nav a,
+  .ddb {
+    font-size: 1rem;
+  }
+  .dd {
+    position: relative;
+  }
+  .ddm {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--leaf);
+    padding: 14px 18px;
+    border-radius: 14px;
+    min-width: 200px;
+    margin: 0;
+  }
 }
-@media(min-width:820px){
-.slot{grid-template-columns:1fr 1fr}.slot:nth-child(even) .media,.band:nth-child(even) .media{order:-1}.media{aspect-ratio:1/1.15}
-.book .in{grid-template-columns:1fr 1fr;align-items:start}form{grid-template-columns:1fr 1fr}form .full{grid-column:1/-1}
-.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(4,1fr)}
+@media (min-width: 820px) {
+  .slot {
+    grid-template-columns: 1fr 1fr;
+  }
+  .slot:nth-child(even) .media,
+  .band:nth-child(even) .media {
+    order: -1;
+  }
+  .media {
+    aspect-ratio: 1/1.15;
+  }
+  .book .in {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  form {
+    grid-template-columns: 1fr 1fr;
+  }
+  form .full {
+    grid-column: 1/-1;
+  }
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
