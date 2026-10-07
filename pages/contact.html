@@ -1,21 +1,118 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Contact | Destiny Gardens</title><meta name="description" content="Dining, family days, events and live music in Ruiru."><meta name="theme-color" content="#12281E">
-<link rel="icon" href="../favicon.ico"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&family=Young+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/variables.css"><link rel="stylesheet" href="../css/reset.css"><link rel="stylesheet" href="../css/main.css"><link rel="stylesheet" href="../css/navbar.css"><link rel="stylesheet" href="../css/hero.css"><link rel="stylesheet" href="../css/about.css"><link rel="stylesheet" href="../css/experiences.css"><link rel="stylesheet" href="../css/events.css"><link rel="stylesheet" href="../css/dining.css"><link rel="stylesheet" href="../css/entertainment.css"><link rel="stylesheet" href="../css/family.css"><link rel="stylesheet" href="../css/gallery.css"><link rel="stylesheet" href="../css/contact.css"><link rel="stylesheet" href="../css/footer.css"><link rel="stylesheet" href="../css/animations.css"><link rel="stylesheet" href="../css/responsive.css">
-</head><body data-root="../">
-<header class="solid"><a class="brand" href="../index.html">Destiny Gardens</a>
-<button class="menu" aria-expanded="false" aria-controls="nav"><img src="../assets/icons/menu.svg" alt="Menu"></button>
-<nav id="nav"><a href="../index.html">Home</a><a href="../pages/about.html">About</a>
-<div class="dd"><button class="ddb" aria-expanded="false">Experience ▾</button><div class="ddm"><a href="../pages/dining.html">Dining</a><a href="../pages/events.html">Events</a><a href="../pages/entertainment.html">Entertainment</a><a href="../pages/family.html">Kids &amp; Family</a><a href="../pages/accommodation.html">Accommodation</a></div></div>
-<a href="../pages/gallery.html">Gallery</a><a href="../pages/contact.html">Contact</a><a class="btn" href="../index.html#book">Book</a></nav></header>
-<main><div class="pagehead"><h1>Contact</h1><p>Reach us on WhatsApp or come visit.</p></div><div class="info"><span>Ruiru, Kenya</span><a href="https://wa.me/254742462900">WhatsApp 0742 462 900</a><a href="https://www.google.com/maps/search/?api=1&query=Destiny+Gardens+Ruiru" target="_blank" rel="noopener">Directions on Google Maps</a></div><section class="book" id="book"><div class="in"><div><h2>Tell us the day. We'll hold the table.</h2><p style="margin-top:1em;max-width:36ch">Your details open a WhatsApp chat with us, ready to send.</p></div>
-<form id="form"><label>Name<input name="n" required autocomplete="name"></label><label>Guests<input name="g" type="number" min="1" value="4" required></label><label>Date<input name="d" type="date"></label>
-<label>What for<select name="o"><option>Lunch or dinner</option><option>Family day</option><option>Event or party</option><option>Live night</option><option>Accommodation</option></select></label>
-<button class="btn full" type="submit">Send on WhatsApp</button></form></div></section></main>
-<footer><b>Destiny Gardens</b><span>Ruiru, Kenya</span><a href="https://www.google.com/maps/search/?api=1&query=Destiny+Gardens+Ruiru" target="_blank" rel="noopener">Get directions on Google Maps</a><a href="https://wa.me/254742462900">WhatsApp 0742 462 900</a></footer>
-<div id="clock" aria-live="polite"><i></i><b></b><span></span></div>
-<script src="../data/site.js"></script><script src="../data/services.js"></script><script src="../data/events.js"></script><script src="../data/gallery.js"></script>
-<script src="../js/lazyload.js"></script><script src="../js/hero.js"></script><script src="../js/slider.js"></script><script src="../js/gallery.js"></script><script src="../js/modal.js"></script><script src="../js/animations.js"></script><script src="../js/navbar.js"></script><script src="../js/mobile.js"></script><script src="../js/main.js"></script>
-</body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Contact | Destiny Gardens</title>
+    <meta name="description" content="Dining, family days, events and live music in Ruiru." />
+    <meta name="theme-color" content="#12281E" />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&family=Young+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/hero.css" />
+    <link rel="stylesheet" href="../css/about.css" />
+    <link rel="stylesheet" href="../css/experiences.css" />
+    <link rel="stylesheet" href="../css/events.css" />
+    <link rel="stylesheet" href="../css/dining.css" />
+    <link rel="stylesheet" href="../css/entertainment.css" />
+    <link rel="stylesheet" href="../css/family.css" />
+    <link rel="stylesheet" href="../css/gallery.css" />
+    <link rel="stylesheet" href="../css/contact.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link rel="stylesheet" href="../css/animations.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+  </head>
+  <body data-root="../">
+    <header class="solid">
+      <a class="brand" href="../index.html">Destiny Gardens</a>
+      <button class="menu" aria-expanded="false" aria-controls="nav">
+        <img src="../assets/icons/menu.svg" alt="Menu" />
+      </button>
+      <nav id="nav">
+        <a href="../index.html">Home</a><a href="../pages/about.html">About</a>
+        <div class="dd">
+          <button class="ddb" aria-expanded="false">Experience ▾</button>
+          <div class="ddm">
+            <a href="../pages/dining.html">Dining</a><a href="../pages/events.html">Events</a
+            ><a href="../pages/entertainment.html">Entertainment</a
+            ><a href="../pages/family.html">Kids &amp; Family</a
+            ><a href="../pages/accommodation.html">Accommodation</a>
+          </div>
+        </div>
+        <a href="../pages/gallery.html">Gallery</a><a href="../pages/contact.html">Contact</a
+        ><a class="btn" href="../index.html#book">Book</a>
+      </nav>
+    </header>
+    <main>
+      <div class="pagehead">
+        <h1>Contact</h1>
+        <p>Reach us on WhatsApp or come visit.</p>
+      </div>
+      <div class="info">
+        <span>Ruiru, Kenya</span><a href="https://wa.me/254742462900">WhatsApp 0742 462 900</a
+        ><a
+          href="https://www.google.com/maps/search/?api=1&query=Destiny+Gardens+Ruiru"
+          target="_blank"
+          rel="noopener"
+          >Directions on Google Maps</a
+        >
+      </div>
+      <section class="book" id="book">
+        <div class="in">
+          <div>
+            <h2>Tell us the day. We'll hold the table.</h2>
+            <p style="margin-top: 1em; max-width: 36ch">
+              Your details open a WhatsApp chat with us, ready to send.
+            </p>
+          </div>
+          <form id="form">
+            <label>Name<input name="n" required autocomplete="name" /></label
+            ><label>Guests<input name="g" type="number" min="1" value="4" required /></label
+            ><label>Date<input name="d" type="date" /></label>
+            <label
+              >What for<select name="o">
+                <option>Lunch or dinner</option>
+                <option>Family day</option>
+                <option>Event or party</option>
+                <option>Live night</option>
+                <option>Accommodation</option>
+              </select></label
+            >
+            <button class="btn full" type="submit">Send on WhatsApp</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <b>Destiny Gardens</b><span>Ruiru, Kenya</span
+      ><a
+        href="https://www.google.com/maps/search/?api=1&query=Destiny+Gardens+Ruiru"
+        target="_blank"
+        rel="noopener"
+        >Get directions on Google Maps</a
+      ><a href="https://wa.me/254742462900">WhatsApp 0742 462 900</a>
+    </footer>
+    <div id="clock" aria-live="polite"><i></i><b></b><span></span></div>
+    <script src="../data/site.js"></script>
+    <script src="../data/services.js"></script>
+    <script src="../data/events.js"></script>
+    <script src="../data/gallery.js"></script>
+    <script src="../js/lazyload.js"></script>
+    <script src="../js/hero.js"></script>
+    <script src="../js/slider.js"></script>
+    <script src="../js/gallery.js"></script>
+    <script src="../js/modal.js"></script>
+    <script src="../js/animations.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/mobile.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
+</html>

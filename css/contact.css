@@ -1,1 +1,11 @@
-.info{display:grid;gap:8px;padding:0 var(--pad) 40px;max-width:var(--max);margin:auto;font-size:1.2rem}.info a{font-weight:700}
+.info {
+  display: grid;
+  gap: 8px;
+  padding: 0 var(--pad) 40px;
+  max-width: var(--max);
+  margin: auto;
+  font-size: 1.2rem;
+}
+.info a {
+  font-weight: 700;
+}
