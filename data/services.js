@@ -61,6 +61,6 @@ const SERVICES = [
     title: 'Too late to drive home? Stay the night.',
     text: 'Rooms are on site. Ask us about availability and rates.',
     tags: ['Rooms', 'Overnight'],
-    img: 'assets/images/chilling/chill1.png',
+    img: 'assets/images/chilling/chillin1.png',
   },
 ]

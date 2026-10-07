@@ -47,7 +47,7 @@
       cat: 'herbs',
       name: 'Lavender',
       latin: 'Lavandula angustifolia',
-      img: 'plant-lavender.jpg',
+      img: 'assets/images/social/swm1.png',
       alt: 'Lavender in full purple bloom',
       desc: 'A silver-leaved shrub of the Mediterranean hills. Its flower spikes calm the air in the Herb Garden from June to August.',
     },
@@ -55,7 +55,7 @@
       cat: 'flowers',
       name: 'Peony',
       latin: 'Paeonia lactiflora',
-      img: 'plant-peony.jpg',
+      img: 'assets/images/food/food2.png',
       alt: 'Pale pink peony in full bloom',
       desc: 'Heavy, fragrant blooms that open for only a few weeks each spring along the Secret Garden wall.',
     },
@@ -63,7 +63,7 @@
       cat: 'trees',
       name: 'Ginkgo',
       latin: 'Ginkgo biloba',
-      img: 'plant-ginkgo.jpg',
+      img: 'assets/images/chilling/chilling0.png',
       alt: 'Ginkgo tree with golden autumn leaves',
       desc: 'A living fossil older than the flowering plants. Each autumn its fan-shaped leaves turn gold within days.',
     },
@@ -71,7 +71,7 @@
       cat: 'medicinal',
       name: 'Echinacea',
       latin: 'Echinacea purpurea',
-      img: 'plant-echinacea.jpg',
+      img: 'assets/images/chilling/chilling3.png',
       alt: 'Purple coneflower with orange centre',
       desc: 'The purple coneflower, long used in traditional remedies, and a favourite of the garden’s bees and butterflies.',
     },
@@ -79,7 +79,7 @@
       cat: 'herbs',
       name: 'Thyme',
       latin: 'Thymus vulgaris',
-      img: 'plant-thyme.jpg',
+      img: 'assets/images/chilling/chillin1.png',
       alt: 'Low mat of thyme with tiny pink flowers',
       desc: 'A low, aromatic carpet between the stepping stones. Brush it as you walk and the scent follows you.',
     },
@@ -87,40 +87,42 @@
   const $ = (id) => document.getElementById(id)
   const tabs = [...document.querySelectorAll('.plants__tabs button')]
   const figImg = $('plantImg')
-  let list = plants,
-    i = 0
-
-  const show = () => {
-    const p = list[i]
-    figImg.classList.add('is-swapping')
-    setTimeout(
-      () => {
-        figImg.style.visibility = ''
-        figImg.src = 'images/' + p.img
-        figImg.alt = p.alt
-        $('plantName').textContent = p.name
-        $('plantLatin').textContent = p.latin
-        $('plantDesc').textContent = p.desc
-        $('plantCount').textContent = `Specimen ${i + 1} of ${list.length}`
-        figImg.classList.remove('is-swapping')
-      },
-      reduced ? 0 : 400
-    )
-  }
-
-  tabs.forEach((tab) =>
-    tab.addEventListener('click', () => {
-      tabs.forEach((t) => t.setAttribute('aria-selected', t === tab))
-      const c = tab.dataset.cat
-      list = c === 'all' ? plants : plants.filter((p) => p.cat === c)
+  if (figImg && tabs.length) {
+    let list = plants,
       i = 0
+
+    const show = () => {
+      const p = list[i]
+      figImg.classList.add('is-swapping')
+      setTimeout(
+        () => {
+          figImg.style.visibility = ''
+          figImg.src = p.img
+          figImg.alt = p.alt
+          $('plantName').textContent = p.name
+          $('plantLatin').textContent = p.latin
+          $('plantDesc').textContent = p.desc
+          $('plantCount').textContent = `Specimen ${i + 1} of ${list.length}`
+          figImg.classList.remove('is-swapping')
+        },
+        reduced ? 0 : 400
+      )
+    }
+
+    tabs.forEach((tab) =>
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.setAttribute('aria-selected', t === tab))
+        const c = tab.dataset.cat
+        list = c === 'all' ? plants : plants.filter((p) => p.cat === c)
+        i = 0
+        show()
+      })
+    )
+    figImg.addEventListener('click', () => {
+      i = (i + 1) % list.length
       show()
     })
-  )
-  figImg.addEventListener('click', () => {
-    i = (i + 1) % list.length
-    show()
-  })
+  }
 
   // Gentle parallax on the immersive image
   const imm = document.querySelector('.immersive')
