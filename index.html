@@ -2,128 +2,368 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Destiny Gardens | Ruiru</title>
-    <meta name="description" content="Dining, family days, events and live music in Ruiru." />
-    <meta name="theme-color" content="#12281E" />
-    <link rel="icon" href="favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Destiny Garden — A place to breathe</title>
+    <meta
+      name="description"
+      content="Destiny Garden is an immersive botanical experience created for curiosity, peace and connection with nature."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&family=Young+Serif&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Instrument+Sans:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/variables.css" />
-    <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/navbar.css" />
-    <link rel="stylesheet" href="css/hero.css" />
-    <link rel="stylesheet" href="css/about.css" />
-    <link rel="stylesheet" href="css/experiences.css" />
-    <link rel="stylesheet" href="css/events.css" />
-    <link rel="stylesheet" href="css/dining.css" />
-    <link rel="stylesheet" href="css/entertainment.css" />
-    <link rel="stylesheet" href="css/family.css" />
-    <link rel="stylesheet" href="css/gallery.css" />
-    <link rel="stylesheet" href="css/contact.css" />
-    <link rel="stylesheet" href="css/footer.css" />
-    <link rel="stylesheet" href="css/animations.css" />
-    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/main.js" defer></script>
   </head>
-  <body data-root="">
-    <header class="">
-      <a class="brand" href="index.html">Destiny Gardens</a>
-      <button class="menu" aria-expanded="false" aria-controls="nav">
-        <img src="assets/icons/menu.svg" alt="Menu" />
-      </button>
-      <nav id="nav">
-        <a href="index.html">Home</a><a href="pages/about.html">About</a>
-        <div class="dd">
-          <button class="ddb" aria-expanded="false">Experience ▾</button>
-          <div class="ddm">
-            <a href="pages/dining.html">Dining</a><a href="pages/events.html">Events</a
-            ><a href="pages/entertainment.html">Entertainment</a
-            ><a href="pages/family.html">Kids &amp; Family</a
-            ><a href="pages/accommodation.html">Accommodation</a>
-          </div>
-        </div>
-        <a href="pages/gallery.html">Gallery</a><a href="pages/contact.html">Contact</a
-        ><a class="btn" href="index.html#book">Book</a>
-      </nav>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a class="nav__logo" href="#top" aria-label="Destiny Garden home">Destiny Garden</a>
+        <nav class="nav__menu" id="menu" aria-label="Primary">
+          <ul class="nav__list">
+            <li><a href="#top">Home</a></li>
+            <li><a href="#explore">Explore</a></li>
+            <li><a href="#collection">Gardens</a></li>
+            <li><a href="#story">Stories</a></li>
+            <li><a href="#visit">About</a></li>
+          </ul>
+          <a class="btn btn--light nav__cta" href="#explore">Explore Garden ↗</a>
+        </nav>
+        <button
+          class="nav__toggle"
+          id="toggle"
+          aria-expanded="false"
+          aria-controls="menu"
+          aria-label="Open menu"
+        >
+          <span></span><span></span>
+        </button>
+      </div>
     </header>
-    <main>
-      <section class="hero">
-        <div class="bg" data-img="assets/images/hero/hero.png"></div>
-        <video
-          data-vid="assets/videos/hero.mp4"
-          muted
-          loop
-          playsinline
-          preload="none"
-          aria-hidden="true"
-        ></video>
-        <div class="in">
-          <h1>From long lunch to last song.</h1>
-          <p>Food, family days, events and live nights in Ruiru. One garden, all day.</p>
-          <div class="row">
-            <a class="btn" href="#book">Book on WhatsApp</a
-            ><a class="btn ghost" href="#slots">See the day</a>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <img
+          class="hero__image"
+          src="images/hero-garden.jpg"
+          alt="Morning light falling through ferns and old trees along a garden path"
+          fetchpriority="high"
+        />
+        <p class="hero__aside" aria-hidden="true">Hortus<br />Vivus</p>
+        <div class="hero__content container">
+          <p class="hero__eyebrow">Welcome to Destiny Garden</p>
+          <h1 class="hero__title"><span>A place</span><span>to breathe.</span></h1>
+          <p class="hero__description">
+            Discover a garden created for curiosity, peace and connection with nature.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--light" href="#explore">Explore the Garden ↗</a>
+            <a class="link link--light" href="#story">Discover Our Story</a>
           </div>
         </div>
+        <a class="hero__scroll" href="#philosophy" aria-label="Scroll to content"
+          ><span></span>Scroll</a
+        >
       </section>
-      <div id="slots"></div>
-      <section class="gal" data-slider aria-label="Gallery">
-        <h2>Around the garden</h2>
-        <div class="strip" id="strip"></div>
-      </section>
-      <section class="book" id="book">
-        <div class="in">
-          <div>
-            <h2>Tell us the day. We'll hold the table.</h2>
-            <p style="margin-top: 1em; max-width: 36ch">
-              Your details open a WhatsApp chat with us, ready to send.
+
+      <section class="philosophy section container" id="philosophy">
+        <p class="label">01 — The Destiny</p>
+        <div class="philosophy__grid">
+          <h2 class="philosophy__title reveal">
+            Nature isn't simply something we look at.<em> It is something we experience.</em>
+          </h2>
+          <div class="philosophy__text reveal">
+            <p>
+              Destiny Garden began as a quiet idea: that a garden can slow a person down. Every
+              path, planting bed and clearing here is shaped to make you pause, notice a leaf,
+              follow a scent, and stay longer than you planned.
+            </p>
+            <p>
+              We pair patient horticulture with gentle technology, so each plant can tell you where
+              it comes from and why it matters.
             </p>
           </div>
-          <form id="form">
-            <label>Name<input name="n" required autocomplete="name" /></label
-            ><label>Guests<input name="g" type="number" min="1" value="4" required /></label
-            ><label>Date<input name="d" type="date" /></label>
-            <label
-              >What for<select name="o">
-                <option>Lunch or dinner</option>
-                <option>Family day</option>
-                <option>Event or party</option>
-                <option>Live night</option>
-                <option>Accommodation</option>
-              </select></label
+        </div>
+      </section>
+
+      <section class="garden section" id="explore">
+        <div class="container">
+          <header class="garden__head">
+            <h2 class="h2 reveal">Explore the Garden</h2>
+            <p class="reveal">
+              Wander through a collection of spaces, plants and experiences designed to reconnect
+              you with nature.
+            </p>
+          </header>
+          <div class="garden__grid">
+            <article class="panel panel--a reveal">
+              <a href="#collection"
+                ><img
+                  src="images/botanical-garden.jpg"
+                  alt="Glasshouse filled with tropical foliage and climbing vines"
+                  loading="lazy"
+                />
+                <div class="panel__body">
+                  <span class="panel__num">I</span>
+                  <h3>Botanical Gardens</h3>
+                  <p>Glasshouses and long borders gathering plants from five continents.</p>
+                  <span class="panel__go">Explore ↗</span>
+                </div></a
+              >
+            </article>
+            <article class="panel panel--b reveal">
+              <a href="#collection"
+                ><img
+                  src="images/secret-garden.jpg"
+                  alt="Stone archway covered in roses leading into a walled garden"
+                  loading="lazy"
+                />
+                <div class="panel__body">
+                  <span class="panel__num">II</span>
+                  <h3>Secret Garden</h3>
+                  <p>
+                    A walled courtyard of roses and moss, found by following the sound of water.
+                  </p>
+                  <span class="panel__go">Explore ↗</span>
+                </div></a
+              >
+            </article>
+            <article class="panel panel--c reveal">
+              <a href="#collection"
+                ><img
+                  src="images/herb-garden.jpg"
+                  alt="Raised beds of lavender, thyme and sage in afternoon sun"
+                  loading="lazy"
+                />
+                <div class="panel__body">
+                  <span class="panel__num">III</span>
+                  <h3>Herb Garden</h3>
+                  <p>Touch, crush and smell: the kitchen and medicine garden.</p>
+                  <span class="panel__go">Explore ↗</span>
+                </div></a
+              >
+            </article>
+            <article class="panel panel--d reveal">
+              <a href="#collection"
+                ><img
+                  src="images/nature-trails.jpg"
+                  alt="Wooded trail winding between tall trees and wildflower meadows"
+                  loading="lazy"
+                />
+                <div class="panel__body">
+                  <span class="panel__num">IV</span>
+                  <h3>Nature Trails</h3>
+                  <p>Four kilometres of marked paths through meadow, wood and wetland.</p>
+                  <span class="panel__go">Explore ↗</span>
+                </div></a
+              >
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="plants section container" id="collection">
+        <h2 class="h2 reveal">Discover the Collection</h2>
+        <div class="plants__tabs" role="tablist" aria-label="Plant categories">
+          <button role="tab" aria-selected="true" data-cat="all">All</button>
+          <button role="tab" aria-selected="false" data-cat="flowers">Flowers</button>
+          <button role="tab" aria-selected="false" data-cat="herbs">Herbs</button>
+          <button role="tab" aria-selected="false" data-cat="trees">Trees</button>
+          <button role="tab" aria-selected="false" data-cat="medicinal">Medicinal</button>
+        </div>
+        <article class="plants__feature" aria-live="polite">
+          <figure class="plants__figure">
+            <img
+              id="plantImg"
+              src="images/plant-lavender.jpg"
+              alt="Lavender in full purple bloom"
+            />
+          </figure>
+          <div class="plants__info">
+            <p class="plants__count" id="plantCount">Specimen 1 of 5</p>
+            <h3 id="plantName">Lavender</h3>
+            <p class="plants__latin" id="plantLatin">Lavandula angustifolia</p>
+            <p id="plantDesc">
+              A silver-leaved shrub of the Mediterranean hills. Its flower spikes calm the air in
+              the Herb Garden from June to August.
+            </p>
+            <a class="btn btn--dark" href="#collection">Discover Plant ↗</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="stats section" aria-label="Garden statistics">
+        <dl class="stats__grid container">
+          <div>
+            <dt>Garden Spaces</dt>
+            <dd>15+</dd>
+          </div>
+          <div>
+            <dt>Plant Species</dt>
+            <dd>120+</dd>
+          </div>
+          <div>
+            <dt>Interactive Experiences</dt>
+            <dd>08</dd>
+          </div>
+          <div>
+            <dt>Stories to Discover</dt>
+            <dd>∞</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="story section" id="story">
+        <div class="story__grid container">
+          <figure class="story__image reveal">
+            <img
+              src="images/garden-story.jpg"
+              alt="A gardener's hands planting a seedling into dark soil"
+              loading="lazy"
+            />
+          </figure>
+          <div class="story__text reveal">
+            <p class="label">The Story</p>
+            <h2 class="h2">Every Garden Has a Story.</h2>
+            <p>
+              From a seed to a garden, every journey begins with something small. Ours started with
+              a single bed of lavender and a gardener who refused to hurry.
+            </p>
+            <a class="btn btn--dark" href="#story">Read Our Story →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="experiences section container" id="experiences">
+        <h2 class="h2 reveal">Experience the Garden</h2>
+        <ul class="exp__list">
+          <li class="exp__item">
+            <img src="images/exp-walk.jpg" alt="" loading="lazy" /><a href="#experiences"
+              ><span>01</span>Botanical Walk<i aria-hidden="true">↗</i></a
             >
-            <button class="btn full" type="submit">Send on WhatsApp</button>
-          </form>
+          </li>
+          <li class="exp__item">
+            <img src="images/exp-discovery.jpg" alt="" loading="lazy" /><a href="#experiences"
+              ><span>02</span>Plant Discovery<i aria-hidden="true">↗</i></a
+            >
+          </li>
+          <li class="exp__item">
+            <img src="images/exp-stories.jpg" alt="" loading="lazy" /><a href="#experiences"
+              ><span>03</span>Garden Stories<i aria-hidden="true">↗</i></a
+            >
+          </li>
+          <li class="exp__item">
+            <img src="images/exp-observation.jpg" alt="" loading="lazy" /><a href="#experiences"
+              ><span>04</span>Nature Observation<i aria-hidden="true">↗</i></a
+            >
+          </li>
+          <li class="exp__item">
+            <img src="images/exp-photography.jpg" alt="" loading="lazy" /><a href="#experiences"
+              ><span>05</span>Photography<i aria-hidden="true">↗</i></a
+            >
+          </li>
+        </ul>
+      </section>
+
+      <section class="immersive" id="immersive">
+        <img
+          class="immersive__image"
+          src="images/garden-path.jpg"
+          alt="Long garden path under a canopy of green leaves"
+          loading="lazy"
+        />
+        <div class="immersive__content container">
+          <h2>Slow down.<br />Look closer.</h2>
+          <a class="btn btn--light" href="#explore">Explore Destiny Garden →</a>
+        </div>
+      </section>
+
+      <section class="visit section container" id="visit">
+        <h2 class="h2 reveal">Come Experience It Yourself.</h2>
+        <div class="visit__grid">
+          <div class="visit__info">
+            <p class="visit__name">Destiny Garden</p>
+            <h3>Opening Hours</h3>
+            <p>Monday — Sunday<br />08:00 — 18:00</p>
+            <h3>Location</h3>
+            <p>[Garden Location]</p>
+            <a class="btn btn--dark" href="#visit">Get Directions ↗</a>
+          </div>
+          <div
+            class="visit__map"
+            role="img"
+            aria-label="Map placeholder showing the garden location"
+          >
+            <span>Map</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="newsletter section" id="newsletter">
+        <div class="container newsletter__inner">
+          <h2 class="h2">Stay Connected With The Garden</h2>
+          <div>
+            <p>
+              Stories, plants, seasonal discoveries and new experiences — delivered occasionally.
+            </p>
+            <form class="newsletter__form" action="#" method="post">
+              <label class="sr" for="email">Your email address</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="Your email address"
+                required
+                autocomplete="email"
+              />
+              <button class="btn btn--light" type="submit">Join ↗</button>
+            </form>
+          </div>
         </div>
       </section>
     </main>
-    <footer>
-      <b>Destiny Gardens</b><span>Ruiru, Kenya</span
-      ><a
-        href="https://www.google.com/maps/search/?api=1&query=Destiny+Gardens+Ruiru"
-        target="_blank"
-        rel="noopener"
-        >Get directions on Google Maps</a
-      ><a href="https://wa.me/254742462900">WhatsApp 0742 462 900</a>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__brand">
+          <p class="footer__logo">Destiny<br />Garden</p>
+          <p>Where nature tells a story.</p>
+        </div>
+        <nav aria-label="Footer">
+          <h3>Navigate</h3>
+          <ul>
+            <li><a href="#explore">Explore</a></li>
+            <li><a href="#collection">Garden</a></li>
+            <li><a href="#collection">Plants</a></li>
+            <li><a href="#story">Stories</a></li>
+            <li><a href="#visit">About</a></li>
+          </ul>
+        </nav>
+        <div>
+          <h3>Connect</h3>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Visit</h3>
+          <ul>
+            <li>[Garden Location]</li>
+            <li>Daily, 08:00 — 18:00</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer__final container">See you in the garden.</p>
+      <div class="container footer__bar">
+        <p>© 2026 Destiny Garden</p>
+        <p><a href="#">Privacy</a> <a href="#">Terms</a></p>
+      </div>
     </footer>
-    <div id="clock" aria-live="polite"><i></i><b></b><span></span></div>
-    <script src="data/site.js"></script>
-    <script src="data/services.js"></script>
-    <script src="data/events.js"></script>
-    <script src="data/gallery.js"></script>
-    <script src="js/lazyload.js"></script>
-    <script src="js/hero.js"></script>
-    <script src="js/slider.js"></script>
-    <script src="js/gallery.js"></script>
-    <script src="js/modal.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/navbar.js"></script>
-    <script src="js/mobile.js"></script>
-    <script src="js/main.js"></script>
   </body>
 </html>
