@@ -1,0 +1,9 @@
+header{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 12px) var(--pad) 12px;color:#fff;transition:background .3s}
+header.solid{background:var(--leaf)}
+.brand{font:400 1.25rem var(--serif);text-decoration:none}
+.menu{background:none;border:0;padding:6px;cursor:pointer}.menu img{width:28px;display:block}
+header nav{display:none;position:fixed;inset:60px 0 0 0;background:var(--leaf);padding:24px var(--pad);overflow:auto}
+header.open nav{display:grid;gap:18px;align-content:start}
+header nav a,.ddb{text-decoration:none;font-size:1.3rem;color:#fff;background:none;border:0;font-family:var(--sans);cursor:pointer;text-align:left}
+.ddm{display:none;padding:10px 0 0 16px;gap:10px}.dd.open .ddm{display:grid}.ddm a{font-size:1.05rem}
+header nav .btn{color:var(--leaf);text-align:center;font-size:1rem}
