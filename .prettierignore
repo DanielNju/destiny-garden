@@ -1,1 +1,5 @@
-"node_modules`nassets/videos`nassets/images`n*.min.js`n*.min.css" | Out-File -Encoding utf8 .prettierignore"node_modules/" | Out-File -Encoding utf8 -Append .gitignore
+node_modules/
+assets/videos/
+assets/images/
+*.min.js
+*.min.css
