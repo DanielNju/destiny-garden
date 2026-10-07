@@ -1,1 +1,7 @@
-﻿node_modules/
+@"
+node_modules
+assets/videos
+assets/images
+*.min.js
+*.min.css
+"@ | Out-File -Encoding utf8 .prettierignore
