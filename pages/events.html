@@ -18,6 +18,16 @@
     />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/pages.css" />
+    <script src="../data/site.js" defer></script>
+    <script src="../data/events.js" defer></script>
+    <script src="../data/services.js" defer></script>
+    <script src="../js/data-ui.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+      defer
+    ></script>
+    <script src="../js/animations.js" defer></script>
     <script src="../js/main.js" defer></script>
   </head>
   <body>
@@ -110,6 +120,10 @@
             <p>On the day, our team handles the details so you can be present.</p>
           </li>
         </ol>
+      </section>
+      <section class="section container">
+        <h2 class="h2 reveal">What we host</h2>
+        <div class="cards" data-render="events"></div>
       </section>
       <section class="newsletter section">
         <div class="container cta__inner">
