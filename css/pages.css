@@ -178,3 +178,117 @@ dialog.lb img {
     grid-template-columns: 1fr;
   }
 }
+/* Motion (GSAP takes over only when it loads; otherwise the original reveals still work) */
+html.gsap .reveal {
+  transition: none !important;
+  clip-path: none !important;
+}
+html.gsap .hero__eyebrow,
+html.gsap .hero__title,
+html.gsap .hero__description,
+html.gsap .hero__actions {
+  animation: none;
+}
+html.gsap .hero__title {
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+dialog.lb[open] {
+  animation: zoom 0.4s var(--ease);
+}
+@keyframes zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+/* Page refinements */
+@media (min-width: 900px) {
+  .card:nth-child(2) {
+    margin-top: 3.5rem;
+  }
+  .card:nth-child(3) {
+    margin-top: 7rem;
+  }
+}
+.steps li {
+  transition:
+    padding 0.5s var(--ease),
+    background 0.5s;
+}
+.steps li:hover {
+  padding-inline: 1.5rem;
+  background: rgba(216, 205, 181, 0.35);
+}
+.filters button:hover {
+  background: var(--color-beige);
+}
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  outline: 2px solid var(--color-accent);
+  border-color: var(--color-primary);
+}
+/* Day timeline (from data/services.js) */
+.day {
+  margin-top: 3rem;
+  border-top: 1px solid rgba(23, 60, 44, 0.25);
+}
+.day__item {
+  display: grid;
+  grid-template-columns: 8rem 1fr 15rem;
+  gap: 1.5rem 2.5rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(23, 60, 44, 0.25);
+  align-items: start;
+}
+.day__time {
+  font: italic 1.7rem var(--font-serif);
+}
+.day__time::before {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--dot);
+  margin-right: 0.5rem;
+}
+.day__time small {
+  display: block;
+  font: 500 0.75rem var(--font-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-top: 0.35rem;
+}
+.day__item h3 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  margin-bottom: 0.75rem;
+}
+.day__item h3 a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+.day__tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.day__tags li {
+  font-size: 0.8rem;
+  border: 1px solid rgba(23, 60, 44, 0.35);
+  border-radius: 100px;
+  padding: 0.2rem 0.75rem;
+}
+.day__item img {
+  aspect-ratio: 4/3;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+}
+@media (max-width: 760px) {
+  .day__item {
+    grid-template-columns: 1fr;
+  }
+}
