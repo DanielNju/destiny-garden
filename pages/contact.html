@@ -86,20 +86,25 @@
           <p>Monday to Sunday, 08:00 — 18:00</p>
           <h3>Reach us</h3>
           <p>
-            <a class="link" data-wa href="https://wa.me/254742462900">Message us on WhatsApp</a
+            <a class="link link--icon" data-wa href="https://wa.me/254742462900"
+              >Message us on WhatsApp</a
             ><br /><a
-              class="link"
+              class="link link--icon"
               data-maps
               target="_blank"
               rel="noopener"
               href="https://www.google.com/maps/search/?api=1&query=Destiny+Gardens+Ruiru"
-              >Open in Google Maps</a
-            >
+              ><img class="inline-icon" src="../assets/icons/location.svg" alt="" />Open in Google
+              Maps <img class="inline-icon" src="../assets/icons/arrow.svg" alt=""
+            /></a>
           </p>
         </div>
         <form class="form" data-note="Thank you. We will reply shortly." action="#" method="post">
           <label>Name<input name="name" required autocomplete="name" /></label
-          ><label>Email<input type="email" name="email" required autocomplete="email" /></label
+          ><label
+            ><span class="link--icon"
+              ><img class="inline-icon" src="../assets/icons/mail.svg" alt="" />Email</span
+            ><input type="email" name="email" required autocomplete="email" /></label
           ><label
             >I would like to<select name="topic">
               <option>Reserve a table</option>
@@ -107,7 +112,10 @@
               <option>Book a stay</option>
               <option>Something else</option>
             </select></label
-          ><label>Date<input type="date" name="date" /></label
+          ><label
+            ><span class="link--icon"
+              ><img class="inline-icon" src="../assets/icons/calendar.svg" alt="" />Date</span
+            ><input type="date" name="date" /></label
           ><label>Message<textarea name="msg" rows="4"></textarea></label
           ><button class="btn btn--dark" type="submit">Send request ↗</button>
           <p class="form-note" role="status"></p>
