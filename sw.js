@@ -1,11 +1,13 @@
 // Destiny Garden service worker. Bump VERSION on every deploy to refresh caches.
-const VERSION = 'dg-v2'
+const VERSION = 'dg-v3'
 const SHELL = `${VERSION}-shell`
 const RUNTIME = `${VERSION}-runtime`
 const MAX_RUNTIME = 80
 const PRECACHE = [
   './',
   'index.html',
+  'manifest.json',
+  'robots.txt',
   '404.html',
   'pages/about.html',
   'pages/dining.html',
@@ -24,6 +26,8 @@ const PRECACHE = [
   'data/events.js',
   'data/services.js',
   'data/gallery.js',
+  'favicon.ico',
+  'assets/icons/app-icon.svg',
 ]
 const CDN = ['cdnjs.cloudflare.com', 'fonts.googleapis.com', 'fonts.gstatic.com']
 

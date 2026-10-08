@@ -755,6 +755,10 @@ em {
 .newsletter__form:focus-within {
   border-color: var(--color-accent);
 }
+.newsletter__form :disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
 /* 16. Footer */
 .footer {
   background: var(--color-dark);

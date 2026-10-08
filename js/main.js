@@ -79,12 +79,24 @@
     dlg.addEventListener('click', () => dlg.close())
   }
 
-  // Forms: replace with a real endpoint (your backend / Formspree) when ready
-  $$('form[data-note]').forEach((f) =>
+  $$('form[data-delivery="whatsapp"]').forEach((f) =>
     f.addEventListener('submit', (e) => {
       e.preventDefault()
-      f.reset()
-      f.querySelector('.form-note').textContent = f.dataset.note
+      const fields = new FormData(f)
+      const details = Array.from(fields.entries())
+        .filter(([, value]) => String(value).trim())
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n')
+      const href = `https://wa.me/${SITE.wa}?text=${encodeURIComponent(
+        `Hello ${SITE.name}, I would like to get in touch.\n\n${details}`
+      )}`
+      const note = f.querySelector('.form-note')
+      const link = document.createElement('a')
+      link.href = href
+      link.target = '_blank'
+      link.rel = 'noopener noreferrer'
+      link.textContent = 'Open WhatsApp and send your request.'
+      note.replaceChildren(document.createTextNode('Your request is ready. '), link)
     })
   )
 })()
