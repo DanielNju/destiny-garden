@@ -8,6 +8,8 @@
       name="description"
       content="A restorative escape in Ruiru, Kenya, where dining, nature, celebrations and family moments come together in one peaceful garden."
     />
+    <meta name="theme-color" content="#173c2c" />
+    <link rel="icon" href="favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,7 +17,12 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+    <link rel="manifest" href="manifest.json" />
     <script src="data/site.js" defer></script>
+    <script src="data/events.js" defer></script>
+    <script src="data/services.js" defer></script>
+    <script src="data/gallery.js" defer></script>
     <script src="js/data-ui.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script
@@ -302,7 +309,6 @@
       </section>
 
       <section class="experiences section container" id="dining">
-        <h2 class="h2 reveal">Dining</h2>
         <ul class="exp__list">
           <li class="exp__item">
             <img src="assets/images/food/food1.png" alt="Garden dining table" loading="lazy" /><a
@@ -553,21 +559,25 @@
           <h2 class="h2">Stay connected with the garden</h2>
           <div>
             <p>
-              Stories, seasonal discoveries and experiences worth planning around — delivered
-              occasionally.
+              Email updates are coming soon. Check back for seasonal discoveries and experiences
+              worth planning around.
             </p>
-            <form class="newsletter__form" action="#" method="post">
+            <div class="newsletter__form">
               <label class="sr" for="email">Your email address</label>
               <input
                 id="email"
                 type="email"
                 name="email"
                 placeholder="Your email address"
-                required
                 autocomplete="email"
+                aria-describedby="newsletter-note"
+                disabled
               />
-              <button class="btn btn--light" type="submit">Join ↗</button>
-            </form>
+              <button class="btn btn--light" type="button" disabled>Coming soon</button>
+            </div>
+            <p class="form-note" id="newsletter-note" role="status">
+              Newsletter sign-up is not connected yet.
+            </p>
           </div>
         </div>
       </section>

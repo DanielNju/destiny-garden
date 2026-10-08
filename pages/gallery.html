@@ -15,6 +15,9 @@
     />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/pages.css" />
+    <link rel="manifest" href="../manifest.json" />
+    <script src="../data/gallery.js" defer></script>
+    <script src="../js/data-ui.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
@@ -58,7 +61,7 @@
       <section class="hero phero">
         <img
           class="hero__image"
-          src="../assets/images/gallery/gallery-01.jpg"
+          src="../assets/images/gallery/1swp.jpg"
           alt=""
           fetchpriority="high"
         />
@@ -77,57 +80,7 @@
           ><button type="button" data-f="Events" aria-pressed="false">Events</button
           ><button type="button" data-f="Family" aria-pressed="false">Family</button>
         </div>
-        <div class="masonry">
-          <button type="button" data-cat="Garden">
-            <img
-              src="../assets/images/gallery/1swp.jpg"
-              alt="Poolside garden view"
-              loading="lazy"
-            /></button
-          ><button type="button" data-cat="Dining">
-            <img
-              src="../assets/images/gallery/fhp1.png"
-              alt="Outdoor dining scene"
-              loading="lazy"
-            /></button
-          ><button type="button" data-cat="Evenings">
-            <img
-              src="../assets/images/gallery/fhp2.png"
-              alt="Garden gathering at dusk"
-              loading="lazy"
-            /></button
-          ><button type="button" data-cat="Events">
-            <img
-              src="../assets/images/events/eventb.png"
-              alt="Private celebration"
-              loading="lazy"
-            /></button
-          ><button type="button" data-cat="Dining">
-            <img
-              src="../assets/images/food/food1.png"
-              alt="Garden dining table"
-              loading="lazy"
-            /></button
-          ><button type="button" data-cat="Evenings">
-            <img
-              src="../assets/images/nightlife/night1.png"
-              alt="Night event under lights"
-              loading="lazy"
-            /></button
-          ><button type="button" data-cat="Family">
-            <img
-              src="../assets/images/family/kidp1.png"
-              alt="Children playing"
-              loading="lazy"
-            /></button
-          ><button type="button" data-cat="Garden">
-            <img
-              src="../assets/images/chilling/chilling2.png"
-              alt="Relaxed stay area"
-              loading="lazy"
-            />
-          </button>
-        </div>
+        <div class="masonry" data-render="gallery"></div>
         <dialog class="lb" aria-label="Photo viewer"><img alt="" /></dialog>
       </section>
       <section class="newsletter section">

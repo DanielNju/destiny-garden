@@ -18,6 +18,7 @@
     />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/pages.css" />
+    <link rel="manifest" href="../manifest.json" />
     <script src="../data/site.js" defer></script>
     <script src="../data/events.js" defer></script>
     <script src="../data/services.js" defer></script>
@@ -63,12 +64,7 @@
     </header>
     <main id="main">
       <section class="hero phero">
-        <img
-          class="hero__image"
-          src="../assets/images/hero/hero-2.jpg"
-          alt=""
-          fetchpriority="high"
-        />
+        <img class="hero__image" src="../assets/images/hero/hero.png" alt="" fetchpriority="high" />
         <div class="hero__content container">
           <p class="hero__eyebrow">Contact</p>
           <h1 class="hero__title"><span>Let us host you.</span></h1>
@@ -97,7 +93,7 @@
             >
           </p>
         </div>
-        <form class="form" data-note="Thank you. We will reply shortly." action="#" method="post">
+        <form class="form" data-delivery="whatsapp">
           <label>Name<input name="name" required autocomplete="name" /></label
           ><label>Email<input type="email" name="email" required autocomplete="email" /></label
           ><label

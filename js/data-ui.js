@@ -17,7 +17,16 @@
         <p class="day__time">${s.time}<small>${s.name}</small></p>
         <div><h3><a href="${pg}${s.page}">${s.title}</a></h3><p>${s.text}</p>
         <ul class="day__tags">${s.tags.map((t) => `<li>${t}</li>`).join('')}</ul></div>
-        <img src="${up}${s.img}" alt="${s.name}" loading="lazy"></article>`
+        <div class="day__media"><img src="${up}${s.img}" alt="${s.name}" loading="lazy">
+        ${s.vid ? `<video controls preload="none" poster="${up}${s.img}" aria-label="${s.name}"><source src="${up}${s.vid}" type="video/mp4"></video>` : ''}</div></article>`
+      ).join('')
+    })
+  if (typeof GALLERY !== 'undefined')
+    each('[data-render=gallery]', (el) => {
+      el.innerHTML = GALLERY.map(
+        (image) => `<button type="button" data-cat="${image.category}">
+          <img src="${up}${image.src}" alt="${image.alt}" loading="lazy">
+        </button>`
       ).join('')
     })
   if (typeof EVENTS !== 'undefined')
